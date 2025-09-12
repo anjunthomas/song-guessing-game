@@ -3,7 +3,6 @@ document.addEventListener('DOMContentLoaded', function() {
     showHomePage();
 });
 
-// 
 function showHomePage() {
     hideAllScreens();
     document.getElementById('home-screen').style.display = 'block';
@@ -22,7 +21,7 @@ function hideAllScreens() {
 HOW TO SHOW/HIDE SCREENS:
 
 To show a specific screen:
-    set the screen you want to display = 'block'
+    set the screen you want to display inside of getElementById in the showHomePage function 
 
 Example to show setup screen:
 hideAllScreens();
