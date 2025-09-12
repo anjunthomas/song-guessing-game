@@ -1,0 +1,6 @@
+API Testing
+Test the iTunes Search API using Postman or Python:
+
+https://itunes.apple.com/search?
+term=taylor+swift&media=music&entity=song&limit=5
+
