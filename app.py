@@ -1,4 +1,8 @@
-from flask import Flask
+from flask import Flask, render_template, request, jsonify, session
+import sqlite3
+import requests
+import random
+import urllib.parse
 
 app = Flask(__name__)
 
