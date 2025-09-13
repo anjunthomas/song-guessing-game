@@ -1,1 +1,5 @@
+<<<<<<< HEAD
 Hi my name is Nicole.
+=======
+Hi my name is anju
+>>>>>>> e5d334600984847b934199b9eff1054252573b89
