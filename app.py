@@ -24,6 +24,9 @@ def test_route():
         "message": f"Hello, {name}! Your request was received successfully."
     })
 
+@app.route('/thaira')
+def thaira():
+    return "Hello, my name is Thaira!"
 
 if __name__ == '__main__':
     app.run(debug=True)
