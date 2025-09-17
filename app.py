@@ -7,8 +7,8 @@ import urllib.parse
 app = Flask(__name__)
 
 @app.route('/')
-def hello():
-    return "Hello World, this is the song guessing game made by Anju!"
+def index(): 
+    return send_from_directory('static', 'index.html')
 
 #backend developers, create a new route here with your name that returns a similar message
 # Ex route. '/anju' 
