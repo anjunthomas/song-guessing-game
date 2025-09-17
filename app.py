@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, jsonify, session, send_from_directory
+import json
 import sqlite3
 import requests
 import random
@@ -51,6 +52,12 @@ def init_db():
     
     connection.commit()
     connection.close()
+
+#not the actual implementation, just the way to see the iTunes APi
+response = requests.get("https://itunes.apple.com/search?term=taylor+swift&media=music&entity=song&limit=5")
+data = response.json()
+
+print(json.dumps(data, indent=2))
 
 if __name__ == '__main__':
     init_db()
