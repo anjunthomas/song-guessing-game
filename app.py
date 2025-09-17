@@ -53,11 +53,37 @@ def init_db():
     connection.commit()
     connection.close()
 
-#not the actual implementation, just the way to see the iTunes APi
-response = requests.get("https://itunes.apple.com/search?term=taylor+swift&media=music&entity=song&limit=5")
-data = response.json()
+def get_artist_songs(artist_name):
+    # URL encode the artist name to handle spaces/special characters
+    encoded_artist = urllib.parse.quote(artist_name)
+    url = f"https://itunes.apple.com/search?term={encoded_artist}&media=music&entity=song&limit=10"
+    
+    response = requests.get(url)
+    data = response.json()
+    
+    # Filter songs that have preview URLs
+    songs = []
+    for item in data.get('results', []):
+        if item.get('previewUrl') and item.get('trackName'):
+            songs.append({
+                'name': item['trackName'],
+                'preview_url': item['previewUrl'],
+                'artist': item['artistName']
+            })
+    
+    return songs    
 
-print(json.dumps(data, indent=2))
+#not the actual implementation, just the way to see the iTunes APi
+
+def test_itunes_api():
+    response = requests.get("https://itunes.apple.com/search?term=taylor+swift&media=music&entity=song&limit=5")
+    data = response.json()
+    print(json.dumps(data, indent=2))
+
+@app.route('/test-itunes')
+def test_itunes_route():
+    test_itunes_api()
+    return "terminal contains iTunes API output"
 
 if __name__ == '__main__':
     init_db()
