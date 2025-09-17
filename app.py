@@ -52,8 +52,21 @@ def init_db():
     connection.commit()
     connection.close()
 
+
+#def add_data():
+#    connection = sqlite3.connect('database.db')
+#    cursor = connection.cursor()
+
+#   cursor.execute('INSERT INTO scores (username, score, artist) VALUES (?, ?, ?)', ("John", 1, "Ed Sheeran"))
+
+#   connection.commit()
+#   connection.close()
+
+#add_data()
+
 if __name__ == '__main__':
     init_db()
+
     app.run(debug=True)
 
     
