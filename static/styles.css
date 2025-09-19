@@ -1,0 +1,40 @@
+body {
+    background-color: rgb(164, 213, 246);
+}
+
+#home-screen{
+    background-color: rgb(227, 231, 231);
+    width: 600px;
+    height: 250px;
+    margin: 80px auto;
+    box-shadow: 0px 3px 4px rgba(52, 53, 53, 0.932);
+    padding-top: 40px;
+    padding-bottom: 60px;
+}
+
+h1 {
+    text-align: center;
+    margin-top: 70px;
+    font-size: 40px;
+    font-family: 'Cooper';
+    color:rgb(4, 54, 37);
+}
+
+button{
+    background-color:rgb(4, 54, 37);
+    color: white;
+    display: block;
+    margin: 30px auto;
+    height: 60px;
+    width: 220px;
+    font-size: 20px;
+    font-family: 'Cooper';
+}
+
+#home-screen p{
+    text-align: center;
+    color: rgb(4, 54, 37);
+    font-size: 20px;
+    font-family: 'Cooper';
+}
+
