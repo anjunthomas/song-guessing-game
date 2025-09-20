@@ -7,8 +7,8 @@ import urllib.parse
 app = Flask(__name__)
 
 @app.route('/')
-def hello():
-    return "Hello World, this is the song guessing game made by Anju!"
+def index(): 
+    return send_from_directory('static', 'index.html')
 
 
 @app.route('/jessie')
@@ -17,11 +17,11 @@ def jessie():
 #backend developers, create a new route here with your name that returns a similar message
 # Ex route. '/anju' 
 # push to your branch to verify flask is working
-@app.route('/guess', methods=['POST'])
-def guess():
-    return "guess route is working"
+
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    init_db()
+    add_data()
+    app.run(debug=True, use_reloader=False)
 
     
