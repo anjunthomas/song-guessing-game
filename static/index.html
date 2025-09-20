@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Song Guessing Game</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>Song Guessing Game</h1>
+    <div id="home-screen">
+        <p>Choose an artist. <br> Guess the song. <br> Rank against other players!</p>
+        <button onclick="showSetupScreen()">Start Playing</button>
+        <button onclick="showScores()">View Scores</button>
+        <div id="scores-display" style="display: none;"></div>
+    </div>
+
+    <div id="setup-screen" style="display: none;">
+        <input type="text" id="username" placeholder="Enter your name">
+        <input type="text" id="artist" placeholder="Enter artist name">
+        <button onclick="startGame()">Start Game</button>
+    </div>
+
+    <div id="game-screen" style="display: none;">
+        <p>Game Screen</p>
+        <audio></audio>
+    </div>
+
+    <div id="result-screen" style="display: none;">
+        <p>Result Screen</p>
+    </div>
+
+    <div id="gameover-screen" style="display: none;">
+        <p>Game Over Screen</p>
+    </div>
+    <script src="game.js"></script>
+</body>
+</html>
