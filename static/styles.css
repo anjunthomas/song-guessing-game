@@ -1,40 +1,57 @@
 body {
-    background-color: rgb(164, 213, 246);
+  font-family: Arial, sans-serif;
+  background-color: #e2f7f3;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 }
 
-#home-screen{
-    background-color: rgb(227, 231, 231);
-    width: 600px;
-    height: 250px;
-    margin: 80px auto;
-    box-shadow: 0px 3px 4px rgba(52, 53, 53, 0.932);
-    padding-top: 40px;
-    padding-bottom: 60px;
+.setup-screen { /* white box, not working */
+  background-color: white;
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  width: 350px;
 }
 
-h1 {
-    text-align: center;
-    margin-top: 70px;
-    font-size: 40px;
-    font-family: 'Cooper';
-    color:rgb(4, 54, 37);
+h1 { /* Song Guessing Game Title */
+  font-size: 32px;
+  color:rgb(41, 88, 49);
+  margin-bottom: 30px;
 }
 
-button{
-    background-color:rgb(4, 54, 37);
-    color: white;
-    display: block;
-    margin: 30px auto;
-    height: 60px;
-    width: 220px;
-    font-size: 20px;
-    font-family: 'Cooper';
+h2 { /* Choose an artist */
+  font-size: 20px;
+  color:rgb(41, 88, 49);
+  align-self: center;
+  margin-bottom: 10px;
 }
 
-#home-screen p{
-    text-align: center;
-    color: rgb(4, 54, 37);
-    font-size: 20px;
-    font-family: 'Cooper';
+.form-setup-screen { /* column for input boxes */
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 }
 
+input { /* input boxes */
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+button { /* Start Game Button */
+  background-color: #6ddad4;
+  padding: 12px;
+  border: none;
+  color: white;
+  font-size: 16px;
+  border-radius: 5px;
+  /*cursor: pointer;*/ /* make a custom cursor? */
+}
+
+button:hover {
+  background-color: #5cb8b1;
+}
