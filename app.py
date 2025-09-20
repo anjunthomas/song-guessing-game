@@ -7,8 +7,8 @@ import urllib.parse
 app = Flask(__name__)
 
 @app.route('/')
-def hello():
-    return "Hello World, this is the song guessing game made by Anju!"
+def index(): 
+    return send_from_directory('static', 'index.html')
 
 #backend developers, create a new route here with your name that returns a similar message
 # Ex route. '/anju' 
@@ -24,8 +24,48 @@ def test_route():
         "message": f"Hello, {name}! Your request was received successfully."
     })
 
+# thaira's personal route following example above
+@app.route('/thaira')
+def thaira():
+    return "Hello, my name is Thaira!"
+
+# game route
+@app.route('/game', methods=['POST'])
+def game():
+    return jsonify({
+        "message": "game route is working"
+    })
+
+# initialize database
+def init_db():
+    connection = sqlite3.connect('database.db')
+    cursor = connection.cursor()
+
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS scores (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            username TEXT NOT NULL,
+            score INTEGER,
+            artist TEXT,
+            timestamp DATETIME DEFAULT CURRENT_TIMESTAMP)''')
+    
+    connection.commit()
+    connection.close()
+
+
+def add_data():
+    connection = sqlite3.connect('database.db')
+    cursor = connection.cursor()
+
+    cursor.execute('INSERT INTO scores (username, score, artist) VALUES (?, ?, ?)', ("bob", 2, "Ariana Grande"))
+
+    connection.commit()
+    connection.close()
+
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    init_db()
+    add_data()
+    app.run(debug=True, use_reloader=False)
 
     
