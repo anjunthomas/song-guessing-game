@@ -12,6 +12,14 @@ function showSetupScreen() {
     document.getElementById('setup-screen').style.display = 'block';
 }
 
+function testScreen(screenName) {
+    hideAllScreens();
+    document.getElementById(screenName + '-screen').style.display = 'block';
+}
+
+/*function for capturing username/artist*/
+/*fetch api request*/
+
 /* 
 HOW TO SHOW/HIDE SCREENS:
 

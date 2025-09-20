@@ -1,0 +1,58 @@
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #e2f7f3;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.setup-screen { /* white box, not working */
+  background-color: white;
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  width: 350px;
+}
+
+h1 { /* Song Guessing Game Title */
+  font-size: 32px;
+  color:rgb(41, 88, 49);
+  margin-bottom: 30px;
+}
+
+h2 { /* Choose an artist */
+  font-size: 20px;
+  color:rgb(41, 88, 49);
+  align-self: center;
+  margin-bottom: 10px;
+}
+
+.form-setup-screen { /* column for input boxes */
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+input { /* input boxes */
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+button { /* Start Game Button */
+  background-color: #6ddad4;
+  padding: 12px;
+  border: none;
+  color: white;
+  font-size: 16px;
+  border-radius: 5px;
+  /*cursor: pointer;*/ /* make a custom cursor? */
+}
+
+button:hover {
+  background-color: #5cb8b1;
+}
