@@ -133,11 +133,68 @@ def add_data():
     connection = sqlite3.connect('database.db')
     cursor = connection.cursor()
 
-    cursor.execute('INSERT INTO scores (username, score, artist) VALUES (?, ?, ?)', ("bob", 2, "Ariana Grande"))
+    cursor.execute('INSERT INTO scores (username, score, artist) VALUES (?, ?, ?)', ("lisa", 3, "Doja Cat"))
 
     connection.commit()
     connection.close()
 
+# helper function returns 3 random songs using iTunes API
+def get_artist_songs(artist_name):
+    try:
+        artist = urllib.parse.quote(artist_name)
+        url = f"https://itunes.apple.com/search?term={artist}&media=music&entity=song&limit=5"
+        response = requests.get(url)
+
+        # check if request worked
+        if response.status_code != 200:
+            return[]
+
+        data = response.json()
+        results = data.get("results", [])
+
+        # initialize song array
+        songs = []
+
+        # append songs with "previewUrl" key
+        for song in results:
+            if "previewUrl" in song:
+                songs.append(song)
+
+        return random.sample(songs, min(3, len(songs)))
+    
+    except Exception as e:
+        print(f"Error in get_artist_songs: {str(e)}")
+        return []
+
+# start game route
+@app.route('/api/start-game', methods = ['POST'])
+def start_game():
+    data = request.get_json()
+
+    # get username and artist from request
+    username = data.get('username')
+    artist = data.get('artist')
+
+    # check if both values exist
+    if not username or not artist:
+        return jsonify({"error": "Missing 'username' or 'artist' in request."}), 400
+    
+    try:
+        # call helper function
+        songs = get_artist_songs(artist)
+
+    except Exception as e:
+        return jsonify({"error": f"Error fetching songs: {str(e)}"}), 500
+    
+    if not songs:
+        return jsonify({"error": f"No songs found for artist '{artist}'."}), 404
+    
+    return jsonify({
+        "message": "Game started successfully",
+        "username": username,
+        "artist": artist,
+        "songs": songs
+    })
 
 if __name__ == '__main__':
     init_db()
