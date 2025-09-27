@@ -6,9 +6,10 @@ body {
   justify-content: center;
   align-items: center;
   height: 100vh;
+  /*cursor: url('https://cdn-icons-png.freepik.com/512/10742/10742274.png?ga=GA1.1.237091776.1758978295'), auto; /* custom music note cursor, not working */
 }
 
-.setup-screen { /* white box, not working */
+.setup-screen { /* white box around all text */
   background-color: white;
   padding: 40px;
   border-radius: 10px;

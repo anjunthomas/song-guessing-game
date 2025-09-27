@@ -14,7 +14,8 @@ def hello():
 # Ex route. '/anju' 
 # push to your branch to verify flask is working
 
-#example route to show POST request 
+#example route to show POST request
+'''
 @app.route('/test', methods=['POST'])
 def test_route():
     data = request.get_json()
@@ -23,16 +24,7 @@ def test_route():
     return jsonify({
         "message": f"Hello, {name}! Your request was received successfully."
     })
-
-#fetch request
-@app.route('/api/start-game', methods=['POST'])
-def test_route():
-    data = request.get_json()
-    name = data.get("username", "artist")
-    
-    return jsonify({
-        "message": f"Hello, {name}! Your request was received successfully."
-    })
+'''
 
 
 if __name__ == '__main__':
