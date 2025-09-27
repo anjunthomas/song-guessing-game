@@ -12,6 +12,17 @@ function showSetupScreen() {
     document.getElementById('setup-screen').style.display = 'block';
 }
 
+function showGameScreen() {
+    hideAllScreens();
+    document.getElementById('game-screen').style.display = 'block';
+}
+
+function testScreen(screenName) {
+    hideAllScreens();
+    document.getElementById(screenName + '-screen').style.display = 'block';
+    console.log('I can see the screen');
+}
+
 /* 
 HOW TO SHOW/HIDE SCREENS:
 
@@ -31,6 +42,11 @@ document.getElementById('game-screen').style.display = 'block';
     and then using the /api/start-game route to create a POST fetch request
 
 */
+
+function startGame(){
+    hideAllScreens();
+    showGameScreen();
+}
 
 function startRound(roundData) {
     hideAllScreens();
@@ -54,6 +70,48 @@ function startRound(roundData) {
     
     */
 }
+
+function submitGuess(){
+    let currentGameId = "testuser"; //testing purposes
+    const guess = document.getElementById('guess-input').value;
+    fetch('/api/submit-guess', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      game_id: currentGameId,
+      guess: guess
+    })
+  })
+}
+
+
+function startCountdown() {
+  let timeLeft = 30;
+  let isRunning = false;
+  let timer = null;    
+  const countdownElement = document.getElementById("countdown");
+
+  if (!isRunning) {
+    // start or resume
+    isRunning = true;
+
+    timer = setInterval(() => {
+      timeLeft--;
+      countdownElement.textContent = timeLeft;
+
+      if (timeLeft <= 0) {
+        clearInterval(timer);
+        isRunning = false;
+      }
+    }, 1000);
+
+  } else {
+    // pause countdown
+    clearInterval(timer);
+    isRunning = false;
+  }
+}
+
 
 
 
