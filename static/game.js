@@ -12,6 +12,7 @@ function showSetupScreen() {
     document.getElementById('setup-screen').style.display = 'block';
 }
 
+<<<<<<< HEAD
 function showGameScreen() {
     hideAllScreens();
     document.getElementById('game-screen').style.display = 'block';
@@ -23,6 +24,14 @@ function testScreen(screenName) {
     console.log('I can see the screen');
 }
 
+=======
+function testScreen(screenName) {
+    hideAllScreens();
+    document.getElementById(screenName + '-screen').style.display = 'block';
+}
+
+
+>>>>>>> 234c469007cb3d190f5c247cc2b4e5d02dfca173
 /* 
 HOW TO SHOW/HIDE SCREENS:
 
@@ -42,6 +51,39 @@ document.getElementById('game-screen').style.display = 'block';
     and then using the /api/start-game route to create a POST fetch request
 
 */
+function startGame() {
+    const username = document.getElementById('username').value;
+    const artist = document.getElementById('artist').value;
+    if (!username || !artist) {
+        alert('Please enter both username and artist name!');
+        return;
+    }
+
+    //POST fetch request to start the game
+    fetch('/api/start-game', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            username: username,
+            artist: artist
+        })
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Failed to start game');
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('Game started:', data);
+        startRound(data); //game starts
+    })
+    .catch(error => {
+        console.error('Error starting game: ', error);
+        alert('Failed to start game. Please try again.');
+    })
+}
+
 
 function startGame(){
     hideAllScreens();

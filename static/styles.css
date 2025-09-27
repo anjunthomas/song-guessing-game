@@ -1,25 +1,29 @@
 body {
-    background-color: rgb(164, 213, 246);
+  font-family: Arial, sans-serif;
+  background-color: #e2f7f3;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  /*cursor: url('https://cdn-icons-png.freepik.com/512/10742/10742274.png?ga=GA1.1.237091776.1758978295'), auto; /* custom music note cursor, not working */
 }
 
-#home-screen{
-    background-color: rgb(227, 231, 231);
-    width: 600px;
-    height: 250px;
-    margin: 80px auto;
-    box-shadow: 0px 3px 4px rgba(52, 53, 53, 0.932);
-    padding-top: 40px;
-    padding-bottom: 60px;
+.setup-screen { /* white box around all text */
+  background-color: white;
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  width: 350px;
 }
 
-h1 {
-    text-align: center;
-    margin-top: 70px;
-    font-size: 40px;
-    font-family: 'Cooper';
-    color:rgb(4, 54, 37);
+h1 { /* Song Guessing Game Title */
+  font-size: 32px;
+  color:rgb(41, 88, 49);
+  margin-bottom: 30px;
 }
 
+<<<<<<< HEAD
 #startPage{
     background-color:rgb(4, 54, 37);
     color: white;
@@ -29,15 +33,22 @@ h1 {
     width: 220px;
     font-size: 20px;
     font-family: 'Cooper';
+=======
+h2 { /* Choose an artist */
+  font-size: 20px;
+  color:rgb(41, 88, 49);
+  align-self: center;
+  margin-bottom: 10px;
+>>>>>>> 234c469007cb3d190f5c247cc2b4e5d02dfca173
 }
 
-#home-screen p{
-    text-align: center;
-    color: rgb(4, 54, 37);
-    font-size: 20px;
-    font-family: 'Cooper';
+.form-setup-screen { /* column for input boxes */
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 }
 
+<<<<<<< HEAD
 #game-screen{
     background-color: white;
     width: 1100px;
@@ -183,3 +194,25 @@ h1 {
 }
 
 
+=======
+input { /* input boxes */
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+button { /* Start Game Button */
+  background-color: #6ddad4;
+  padding: 12px;
+  border: none;
+  color: white;
+  font-size: 16px;
+  border-radius: 5px;
+  /*cursor: pointer;*/ /* make a custom cursor? */
+}
+
+button:hover {
+  background-color: #5cb8b1;
+}
+>>>>>>> 234c469007cb3d190f5c247cc2b4e5d02dfca173
