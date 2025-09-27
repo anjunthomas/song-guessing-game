@@ -12,7 +12,6 @@ function showSetupScreen() {
     document.getElementById('setup-screen').style.display = 'block';
 }
 
-<<<<<<< HEAD
 function showGameScreen() {
     hideAllScreens();
     document.getElementById('game-screen').style.display = 'block';
@@ -21,17 +20,7 @@ function showGameScreen() {
 function testScreen(screenName) {
     hideAllScreens();
     document.getElementById(screenName + '-screen').style.display = 'block';
-    console.log('I can see the screen');
 }
-
-=======
-function testScreen(screenName) {
-    hideAllScreens();
-    document.getElementById(screenName + '-screen').style.display = 'block';
-}
-
-
->>>>>>> 234c469007cb3d190f5c247cc2b4e5d02dfca173
 /* 
 HOW TO SHOW/HIDE SCREENS:
 
@@ -84,11 +73,12 @@ function startGame() {
     })
 }
 
-
+/*
 function startGame(){
     hideAllScreens();
     showGameScreen();
 }
+    */
 
 function startRound(roundData) {
     hideAllScreens();

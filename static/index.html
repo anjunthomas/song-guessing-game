@@ -7,12 +7,11 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>Song Guessing Game</h1>
-    <div id="home-screen">
+    <div id="home-screen" class="setup-screen">
+        <h1>Song Guessing Game</h1>
         <p>Choose an artist. <br> Guess the song. <br> Rank against other players!</p>
-        <button id="startPage" onclick="showSetupScreen()">Start Playing</button>
-        <button id="startPage" onclick="showScores()">View Scores</button>
-        <div id="scores-display" style="display: none;"></div>
+        <button onclick="showSetupScreen()">Start Playing</button>
+        <button onclick="showScores()">View Scores</button>
     </div>
 
     <div id="setup-screen" style="display: none" class="setup-screen">
@@ -26,9 +25,9 @@
     </div>
 
     <div id="game-screen" style="display: none;">
-        <p>Time Left:</p>
-        <p2 id="countdown">30</p2>
-        <p3>Guesses</p3>
+        <p id="time-left">Time Left:</p>
+        <p id="countdown">30</p>
+        <p id="guesses">Guesses</p>
         <div id="guess1"></div>
         <div id="guess2"></div>
         <div id="guess3"></div>

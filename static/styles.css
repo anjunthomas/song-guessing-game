@@ -23,23 +23,36 @@ h1 { /* Song Guessing Game Title */
   margin-bottom: 30px;
 }
 
-<<<<<<< HEAD
-#startPage{
-    background-color:rgb(4, 54, 37);
-    color: white;
-    display: block;
-    margin: 30px auto;
-    height: 60px;
-    width: 220px;
-    font-size: 20px;
-    font-family: 'Cooper';
-=======
 h2 { /* Choose an artist */
   font-size: 20px;
   color:rgb(41, 88, 49);
   align-self: center;
   margin-bottom: 10px;
->>>>>>> 234c469007cb3d190f5c247cc2b4e5d02dfca173
+}
+
+#home-screen {
+  background-color: white;
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  width: 350px;
+}
+
+#home-screen button {
+  background-color: #6ddad4;
+  padding: 12px;
+  border: none;
+  color: white;
+  font-size: 16px;
+  border-radius: 5px;
+  display: block;
+  margin: 15px auto;
+  width: 200px;
+}
+
+#home-screen button:hover {
+  background-color: #5cb8b1;
 }
 
 .form-setup-screen { /* column for input boxes */
@@ -48,7 +61,6 @@ h2 { /* Choose an artist */
   gap: 15px;
 }
 
-<<<<<<< HEAD
 #game-screen{
     background-color: white;
     width: 1100px;
@@ -60,14 +72,14 @@ h2 { /* Choose an artist */
 
 }
 
-#game-screen p{
+#time-left{
     text-align: center;
     color: rgb(4, 54, 37);
     font-size: 40px;
     font-family: 'Cooper';
 }
 
-#game-screen p2{
+#countdown{
     position: absolute;
     right: 600px;
     top: 235px;
@@ -76,7 +88,7 @@ h2 { /* Choose an artist */
     font-family: 'Cooper';
 }
 
-#game-screen p3{
+#guesses{
     position: absolute;
     left: 350px;
     top: 400px;
@@ -193,8 +205,6 @@ h2 { /* Choose an artist */
   border-left: 24px solid black;
 }
 
-
-=======
 input { /* input boxes */
   padding: 10px;
   font-size: 16px;
@@ -202,7 +212,7 @@ input { /* input boxes */
   border-radius: 5px;
 }
 
-button { /* Start Game Button */
+.setup-screen button { /* Start Game Button */
   background-color: #6ddad4;
   padding: 12px;
   border: none;
@@ -212,7 +222,7 @@ button { /* Start Game Button */
   /*cursor: pointer;*/ /* make a custom cursor? */
 }
 
-button:hover {
+.setup-screen button:hover {
   background-color: #5cb8b1;
 }
->>>>>>> 234c469007cb3d190f5c247cc2b4e5d02dfca173
+
