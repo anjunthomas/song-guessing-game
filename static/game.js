@@ -12,12 +12,26 @@ function showSetupScreen() {
     document.getElementById('setup-screen').style.display = 'block';
 }
 
+<<<<<<< HEAD
+function showGameScreen() {
+    hideAllScreens();
+    document.getElementById('game-screen').style.display = 'block';
+}
+
+function testScreen(screenName) {
+    hideAllScreens();
+    document.getElementById(screenName + '-screen').style.display = 'block';
+    console.log('I can see the screen');
+}
+
+=======
 function testScreen(screenName) {
     hideAllScreens();
     document.getElementById(screenName + '-screen').style.display = 'block';
 }
 
 
+>>>>>>> 234c469007cb3d190f5c247cc2b4e5d02dfca173
 /* 
 HOW TO SHOW/HIDE SCREENS:
 
@@ -71,6 +85,11 @@ function startGame() {
 }
 
 
+function startGame(){
+    hideAllScreens();
+    showGameScreen();
+}
+
 function startRound(roundData) {
     hideAllScreens();
     document.getElementById('game-screen').style.display = 'block';
@@ -93,6 +112,48 @@ function startRound(roundData) {
     
     */
 }
+
+function submitGuess(){
+    let currentGameId = "testuser"; //testing purposes
+    const guess = document.getElementById('guess-input').value;
+    fetch('/api/submit-guess', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      game_id: currentGameId,
+      guess: guess
+    })
+  })
+}
+
+
+function startCountdown() {
+  let timeLeft = 30;
+  let isRunning = false;
+  let timer = null;    
+  const countdownElement = document.getElementById("countdown");
+
+  if (!isRunning) {
+    // start or resume
+    isRunning = true;
+
+    timer = setInterval(() => {
+      timeLeft--;
+      countdownElement.textContent = timeLeft;
+
+      if (timeLeft <= 0) {
+        clearInterval(timer);
+        isRunning = false;
+      }
+    }, 1000);
+
+  } else {
+    // pause countdown
+    clearInterval(timer);
+    isRunning = false;
+  }
+}
+
 
 
 
