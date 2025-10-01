@@ -170,6 +170,7 @@ def get_artist_songs(artist_name):
         print(f"Error in get_artist_songs: {str(e)}")
         return []
 
+# creates game session with a unique id and inital game state
 def create_game_session(username, artist, songs):
 
     # get timestamp and create game_id (username + timestamp)
@@ -180,11 +181,13 @@ def create_game_session(username, artist, songs):
         "username": username,
         "artist": artist,
         "songs": songs,
-        "round": 1,
+        "start_round": 1,
         "total_rounds": len(songs),
         "score": 0
     }
 
+    # add session dict into global game_sessions
+    # unique game session can be accessed via game_id
     game_sessions[game_id] = session
     return game_id, session
 
@@ -202,7 +205,7 @@ def start_game():
         return jsonify({"error": "Missing 'username' or 'artist' in request."}), 400
     
     try:
-        # call helper function
+        # call helper function to fetch songs
         songs = get_artist_songs(artist)
 
     except Exception as e:
@@ -211,11 +214,21 @@ def start_game():
     if not songs:
         return jsonify({"error": f"No songs found for artist '{artist}'."}), 404
     
+    # call helper function to create session
+    game_id, session = create_game_session(username, artist, songs)
+
+    # get first song's preview URL
+    first_song = session['songs'][0]
+    preview_url = first_song.get('previewUrl', '')
+
     return jsonify({
-        "message": "Game started successfully",
-        "username": username,
-        "artist": artist,
-        "songs": songs
+        "game_id": game_id,
+        "round": session['start_round'],
+        "total_rounds": session['total_rounds'],
+        "artist": session['artist'],
+        "preview_url": preview_url,
+        "score": 0,
+        "message": f"Game started with {artist}!"
     })
 
 if __name__ == '__main__':
