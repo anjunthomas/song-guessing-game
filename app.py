@@ -3,8 +3,12 @@ import sqlite3
 import requests
 import random
 import urllib.parse
+from datetime import datetime
 
 app = Flask(__name__)
+
+# dicitonary of game sessions
+game_sessions = {}
 
 @app.route('/')
 def index(): 
@@ -165,6 +169,24 @@ def get_artist_songs(artist_name):
     except Exception as e:
         print(f"Error in get_artist_songs: {str(e)}")
         return []
+
+def create_game_session(username, artist, songs):
+
+    # get timestamp and create game_id (username + timestamp)
+    timestamp = datetime.now().strftime("%Y%m%d%H%M")
+    game_id = f"{username}_{timestamp}"
+
+    session = {
+        "username": username,
+        "artist": artist,
+        "songs": songs,
+        "round": 1,
+        "total_rounds": len(songs),
+        "score": 0
+    }
+
+    game_sessions[game_id] = session
+    return game_id, session
 
 # start game route
 @app.route('/api/start-game', methods = ['POST'])
