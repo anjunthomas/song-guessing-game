@@ -3,11 +3,13 @@ import sqlite3
 import requests
 import random
 import urllib.parse
+import time
 from datetime import datetime
 
 app = Flask(__name__)
 
-# dicitonary of game sessions
+#Dictionary of game sessions
+
 game_sessions = {}
 
 @app.route('/')
@@ -174,14 +176,14 @@ def get_artist_songs(artist_name):
 def create_game_session(username, artist, songs):
 
     # get timestamp and create game_id (username + timestamp)
-    timestamp = datetime.now().strftime("%Y%m%d%H%M")
+    timestamp = int(time.time())
     game_id = f"{username}_{timestamp}"
 
     session = {
         "username": username,
         "artist": artist,
         "songs": songs,
-        "start_round": 1,
+        "current_round": 1,
         "total_rounds": len(songs),
         "score": 0
     }
@@ -214,16 +216,14 @@ def start_game():
     if not songs:
         return jsonify({"error": f"No songs found for artist '{artist}'."}), 404
     
-    # call helper function to create session
     game_id, session = create_game_session(username, artist, songs)
-
-    # get first song's preview URL
+    
     first_song = session['songs'][0]
     preview_url = first_song.get('previewUrl', '')
-
+    
     return jsonify({
         "game_id": game_id,
-        "round": session['start_round'],
+        "round": session['current_round'],
         "total_rounds": session['total_rounds'],
         "artist": session['artist'],
         "preview_url": preview_url,
@@ -231,9 +231,94 @@ def start_game():
         "message": f"Game started with {artist}!"
     })
 
+# submit guess route
+@app.route('/api/submit-guess', methods=['POST'])
+def submit_guess():
+    try:
+        data = request.get_json()
+        
+        # get game_id and guess from request
+        game_id = data.get('game_id')
+        guess = data.get('guess')
+        
+        # validate required fields
+        if not game_id or not guess:
+            return jsonify({"error": "Missing 'game_id' or 'guess' in request."}), 400
+        
+        # check if game session exists
+        if game_id not in game_sessions:
+            return jsonify({"error": f"Game session '{game_id}' not found."}), 404
+        
+        # get game session data
+        game = game_sessions[game_id]
+        current_round = game.get('current_round', 1)
+        songs = game.get('songs', [])
+        score = game.get('score', 0)
+        
+        # validate round and songs
+        if current_round > 3 or current_round < 1:
+            return jsonify({"error": "Game has ended or invalid round."}), 400
+        
+        if not songs or len(songs) < current_round:
+            return jsonify({"error": "No songs available for this round."}), 500
+        
+        # get current song for this round
+        current_song = songs[current_round - 1]
+        correct_answer = current_song.get('trackName', '')
+        
+        # check if guess is correct (case-insensitive)
+        is_correct = guess.lower().strip() == correct_answer.lower().strip()
+        
+        # update score if correct
+        if is_correct:
+            score += 10
+            game_sessions[game_id]['score'] = score
+        
+        # prepare response
+        response = {
+            "is_correct": is_correct,
+            "correct_answer": correct_answer,
+            "round": current_round,
+            "score": score,
+            "preview_url": current_song.get('previewUrl', ''),
+            "message": f"Round {current_round} of 3"
+        }
+        
+        # move to next round
+        next_round = current_round + 1
+        if next_round <= 3:
+            game_sessions[game_id]['current_round'] = next_round
+            response["message"] = f"Round {next_round} of 3"
+        else:
+            # game finished
+            response["message"] = "Game completed!"
+            # optionally save final score to database here
+        
+        return jsonify(response)
+        
+    except Exception as e:
+        print(f"Error in /api/submit-guess: {str(e)}")
+        return jsonify({"error": str(e)}), 500
+
+# test route to check game sessions
+@app.route('/api/game-sessions', methods=['GET'])
+def get_game_sessions():
+    try:
+        return jsonify({
+            "active_sessions": len(game_sessions),
+            "sessions": {k: {
+                "username": v.get("username"),
+                "artist": v.get("artist"),
+                "current_round": v.get("current_round"),
+                "score": v.get("score")
+            } for k, v in game_sessions.items()}
+        })
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 if __name__ == '__main__':
     init_db()
-    add_data()
+    #add_data()
     app.run(debug=True, use_reloader=False)
 
     
