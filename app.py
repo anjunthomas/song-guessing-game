@@ -20,7 +20,8 @@ def index():
 # Ex route. '/anju' 
 # push to your branch to verify flask is working
 
-#example route to show POST request 
+#example route to show POST request
+'''
 @app.route('/test', methods=['POST'])
 def test_route():
     data = request.get_json()
@@ -29,6 +30,7 @@ def test_route():
     return jsonify({
         "message": f"Hello, {name}! Your request was received successfully."
     })
+'''
 
 # thaira's personal route following example above
 @app.route('/thaira')

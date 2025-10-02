@@ -7,20 +7,36 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div id="home-screen">
+    <div id="home-screen" class="setup-screen">
+        <h1>Song Guessing Game</h1>
+        <p>Choose an artist. <br> Guess the song. <br> Rank against other players!</p>
         <button onclick="showSetupScreen()">Start Playing</button>
         <button onclick="showScores()">View Scores</button>
-        <div id="scores-display" style="display: none;"></div>
     </div>
 
-    <div id="setup-screen" style="display: none;">
-        <input type="text" id="username" placeholder="Enter your name">
-        <input type="text" id="artist" placeholder="Enter artist name">
-        <button onclick="startGame()">Start Game</button>
+    <div id="setup-screen" style="display: none" class="setup-screen">
+        <h1>Song Guessing Game</h1>
+        <div class="form-setup-screen">
+            <h2>Choose an artist!</h2>
+            <input type="text" id="username" placeholder="Enter your name">
+            <input type="text" id="artist" placeholder="Enter artist name">
+            <button onclick="startGame()">Start Game</button>
+        </div>
     </div>
 
     <div id="game-screen" style="display: none;">
-        <p>Game Screen</p>
+        <p id="time-left">Time Left:</p>
+        <p id="countdown">30</p>
+        <p id="guesses">Guesses</p>
+        <div id="guess1"></div>
+        <div id="guess2"></div>
+        <div id="guess3"></div>
+        <div id="fill"></div>
+        <div id="slider"></div>
+        <div id="slider-knob"></div>
+        <div id="play-button" onclick="startCountdown()"></div>
+        <button id="search">Search</button>
+        <input type="text" id="guess-input" placeholder="Guess the Song Title.">
         <audio></audio>
     </div>
 
