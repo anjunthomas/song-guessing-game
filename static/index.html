@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Song Guessing Game</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="/static/styles.css">
 </head>
 <body>
     <div id="home-screen" class="setup-screen">
@@ -35,7 +35,7 @@
         <div id="slider"></div>
         <div id="slider-knob"></div>
         <div id="play-button" onclick="startCountdown()"></div>
-        <button id="search">Search</button>
+        <button id="search" onclick="submitGuess()">Submit Guess</button>
         <input type="text" id="guess-input" placeholder="Guess the Song Title.">
         <audio></audio>
     </div>
@@ -47,6 +47,6 @@
     <div id="gameover-screen" style="display: none;">
         <p>Game Over Screen</p>
     </div>
-    <script src="game.js"></script>
+    <script src="/static/game.js"></script>
 </body>
 </html>

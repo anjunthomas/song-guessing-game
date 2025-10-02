@@ -40,6 +40,8 @@ document.getElementById('game-screen').style.display = 'block';
     and then using the /api/start-game route to create a POST fetch request
 
 */
+let currentGameData = null;
+
 function startGame() {
     const username = document.getElementById('username').value;
     const artist = document.getElementById('artist').value;
@@ -65,6 +67,7 @@ function startGame() {
     })
     .then(data => {
         console.log('Game started:', data);
+        currentGameData = data;
         startRound(data); //game starts
     })
     .catch(error => {
@@ -84,6 +87,25 @@ function startRound(roundData) {
     hideAllScreens();
     document.getElementById('game-screen').style.display = 'block';
 
+    timeLeft = 30;
+    isRunning = false;
+    if (timer) clearInterval(timer);
+    document.getElementById('countdown').textContent = '30';
+
+    const audio = document.querySelector('audio');
+    audio.src = roundData.preview_url;
+
+    console.log(`Round ${roundData.round} of ${roundData.total_rounds}`);
+    console.log(`Current score: ${roundData.score}`);
+    console.log(`Artist: ${roundData.artist}`);
+    
+
+    audio.play();
+    
+    document.getElementById('countdown').textContent = '30';
+
+}
+
     /* 
     round data parameter contains
         current round number = roundData.round
@@ -101,30 +123,66 @@ function startRound(roundData) {
     handling the guess submission
     
     */
-}
 
-function submitGuess(){
-    let currentGameId = "testuser"; //testing purposes
+
+
+function submitGuess() {
     const guess = document.getElementById('guess-input').value;
+    
+    if (!guess) {
+        alert('Please enter a guess!');
+        return;
+    }
+    
+    if (!currentGameData || !currentGameData.game_id) {
+        alert('No active game!');
+        return;
+    }
+    
     fetch('/api/submit-guess', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      game_id: currentGameId,
-      guess: guess
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            game_id: currentGameData.game_id,
+            guess: guess
+        })
     })
-  })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Guess result:', data);
+        
+        if (data.is_correct) {
+            alert(`Correct! The song was "${data.correct_answer}". Score: ${data.score}`);
+        } else {
+            alert(`Wrong! The correct answer was "${data.correct_answer}". Score: ${data.score}`);
+        }
+        
+        if (data.message === "Game completed!") {
+            alert(`Game Over! Final score: ${data.score}`);
+            hideAllScreens();
+            document.getElementById('home-screen').style.display = 'block';
+        } else {
+            currentGameData.round = data.round;
+            currentGameData.score = data.score;
+            currentGameData.preview_url = data.preview_url;
+            startRound(currentGameData);
+        }
+    })
+    .catch(error => {
+        console.error('Error submitting guess:', error);
+        alert('Failed to submit guess. Please try again.');
+    });
 }
 
+let timeLeft = 30;
+let isRunning = false;
+let timer = null;    
 
 function startCountdown() {
-  let timeLeft = 30;
-  let isRunning = false;
-  let timer = null;    
+  
   const countdownElement = document.getElementById("countdown");
 
   if (!isRunning) {
-    // start or resume
     isRunning = true;
 
     timer = setInterval(() => {
@@ -138,7 +196,6 @@ function startCountdown() {
     }, 1000);
 
   } else {
-    // pause countdown
     clearInterval(timer);
     isRunning = false;
   }

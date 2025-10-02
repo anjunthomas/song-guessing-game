@@ -275,26 +275,26 @@ def submit_guess():
         if is_correct:
             score += 10
             game_sessions[game_id]['score'] = score
+
+        next_round = current_round + 1
+        
+        next_preview_url = ''
+        if next_round <= 3 and next_round <= len(songs):
+            next_preview_url = songs[next_round - 1].get('previewUrl', '')
+            game_sessions[game_id]['current_round'] = next_round
+            message = f"Round {next_round} of 3"
+        else:
+            message = "Game completed!"
         
         # prepare response
         response = {
             "is_correct": is_correct,
             "correct_answer": correct_answer,
-            "round": current_round,
+            "round": next_round,
             "score": score,
-            "preview_url": current_song.get('previewUrl', ''),
-            "message": f"Round {current_round} of 3"
+            "preview_url": next_preview_url,
+            "message": message
         }
-        
-        # move to next round
-        next_round = current_round + 1
-        if next_round <= 3:
-            game_sessions[game_id]['current_round'] = next_round
-            response["message"] = f"Round {next_round} of 3"
-        else:
-            # game finished
-            response["message"] = "Game completed!"
-            # optionally save final score to database here
         
         return jsonify(response)
         
