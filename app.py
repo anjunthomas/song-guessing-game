@@ -4,10 +4,12 @@ import requests
 import random
 import urllib.parse
 import time
+from datetime import datetime
 
 app = Flask(__name__)
 
-# In-memory storage for game sessions
+#Dictionary of game sessions
+
 game_sessions = {}
 
 @app.route('/')
@@ -170,6 +172,27 @@ def get_artist_songs(artist_name):
         print(f"Error in get_artist_songs: {str(e)}")
         return []
 
+# creates game session with a unique id and inital game state
+def create_game_session(username, artist, songs):
+
+    # get timestamp and create game_id (username + timestamp)
+    timestamp = int(time.time())
+    game_id = f"{username}_{timestamp}"
+
+    session = {
+        "username": username,
+        "artist": artist,
+        "songs": songs,
+        "current_round": 1,
+        "total_rounds": len(songs),
+        "score": 0
+    }
+
+    # add session dict into global game_sessions
+    # unique game session can be accessed via game_id
+    game_sessions[game_id] = session
+    return game_id, session
+
 # start game route
 @app.route('/api/start-game', methods = ['POST'])
 def start_game():
@@ -184,7 +207,7 @@ def start_game():
         return jsonify({"error": "Missing 'username' or 'artist' in request."}), 400
     
     try:
-        # call helper function
+        # call helper function to fetch songs
         songs = get_artist_songs(artist)
 
     except Exception as e:
@@ -193,34 +216,19 @@ def start_game():
     if not songs:
         return jsonify({"error": f"No songs found for artist '{artist}'."}), 404
     
-    # create game session ID (format: username_timestamp)
-    timestamp = int(time.time())
-    game_id = f"{username}_{timestamp}"
+    game_id, session = create_game_session(username, artist, songs)
     
-    # store game session
-    game_sessions[game_id] = {
-        "username": username,
-        "artist": artist,
-        "songs": songs,
-        "current_round": 1,
-        "score": 0,
-        "created_at": timestamp
-    }
+    first_song = session['songs'][0]
+    preview_url = first_song.get('previewUrl', '')
     
     return jsonify({
-        "message": "Game started successfully",
         "game_id": game_id,
-        "username": username,
-        "artist": artist,
-        "songs": songs,
-        "current_round": 1
-    })
-    
-    return jsonify({
-        "message": "Game started successfully",
-        "username": username,
-        "artist": artist,
-        "songs": songs
+        "round": session['current_round'],
+        "total_rounds": session['total_rounds'],
+        "artist": session['artist'],
+        "preview_url": preview_url,
+        "score": 0,
+        "message": f"Game started with {artist}!"
     })
 
 # submit guess route
@@ -310,7 +318,7 @@ def get_game_sessions():
 
 if __name__ == '__main__':
     init_db()
-    add_data()
+    #add_data()
     app.run(debug=True, use_reloader=False)
 
     
