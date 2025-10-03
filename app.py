@@ -144,6 +144,30 @@ def add_data():
     connection.commit()
     connection.close()
 
+# helper function to save score to database
+def save_score_to_db(username, score, artist):
+    """
+    Save a game score to the database
+    Returns True if successful, False if error
+    """
+    try:
+        connection = sqlite3.connect('database.db')
+        cursor = connection.cursor()
+        
+        cursor.execute('''
+            INSERT INTO scores (username, score, artist) 
+            VALUES (?, ?, ?)
+        ''', (username, score, artist))
+        
+        connection.commit()
+        connection.close()
+        print(f"Score saved: {username} - {score} points ({artist})")
+        return True
+        
+    except Exception as e:
+        print(f"Error saving score: {str(e)}")
+        return False
+
 # helper function returns 3 random songs using iTunes API
 def get_artist_songs(artist_name):
     try:
@@ -290,9 +314,17 @@ def submit_guess():
             game_sessions[game_id]['current_round'] = next_round
             response["message"] = f"Round {next_round} of 3"
         else:
-            # game finished
-            response["message"] = "Game completed!"
-            # optionally save final score to database here
+            # game finished - save final score to database
+            username = game.get('username', 'Unknown')
+            artist = game.get('artist', 'Unknown')
+            
+            if save_score_to_db(username, score, artist):
+                response["message"] = "Game completed! Score saved to leaderboard."
+            else:
+                response["message"] = "Game completed! (Note: Score saving failed)"
+            
+            # remove game session from memory to free up space
+            del game_sessions[game_id]
         
         return jsonify(response)
         
