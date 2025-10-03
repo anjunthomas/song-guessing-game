@@ -25,19 +25,25 @@
     </div>
 
     <div id="game-screen" style="display: none;">
-        <p id="time-left">Time Left:</p>
-        <p id="countdown">30</p>
-        <p id="guesses">Guesses</p>
-        <div id="guess1"></div>
-        <div id="guess2"></div>
-        <div id="guess3"></div>
-        <div id="fill"></div>
-        <div id="slider"></div>
-        <div id="slider-knob"></div>
-        <div id="play-button" onclick="startCountdown()"></div>
-        <button id="search">Search</button>
-        <input type="text" id="guess-input" placeholder="Guess the Song Title.">
-        <audio></audio>
+        <div id="top-row">
+            <p id="time-left">Time Left:</p>
+            <p id="countdown">30</p>
+        </div>
+        <div id="middle-row">
+            <input type="text" id="guess-input" placeholder="Guess the Song Title.">
+            <button id="search">Search</button>
+        </div>
+        <div id="controls">
+            <audio id="audio-preview" controls></audio>
+        </div>
+        <div id="bottom-row">
+            <p id="guesses">Guesses</p>
+            <div id="guess1"></div>
+            <div id="guess2"></div>
+            <div id="guess3"></div>
+            <p id="score">Score:</p>
+            <p id="real-score">0</p>
+        </div>
     </div>
 
     <div id="result-screen" style="display: none;">

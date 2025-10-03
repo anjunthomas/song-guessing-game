@@ -92,6 +92,10 @@ function startRound(roundData) {
         roundData.score = current score
     */
 
+    startCountdown();
+    playAudio(roundData.preview_url);
+    document.getElementById('real-score').textContent = roundData.score;
+
     
     /* put game logic here 
     should display round number and artist name
@@ -104,8 +108,14 @@ function startRound(roundData) {
 }
 
 function submitGuess(){
-    let currentGameId = "testuser"; //testing purposes
+    let currentGameId = document.getElementById('username').value;
     const guess = document.getElementById('guess-input').value;
+
+    if (!guess) {
+        alert('Please enter a guess!');
+        return;
+    }
+
     fetch('/api/submit-guess', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -114,18 +124,81 @@ function submitGuess(){
       guess: guess
     })
   })
+
+  .then(response => {
+        if (!response.ok) {
+            throw new Error('Failed to submit guess');
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('Guess submitted:', data);
+
+        updateCircle(data.round, data.is_correct);
+
+        alert(data.message);
+    })
+    .catch(error => {
+        console.error('Error submitting guess:', error);
+        alert('Failed to submit guess. Please try again.');
+    });
 }
 
+//function to play the audio
+function playAudio(url) {
+  const audio = document.getElementById('audio-preview');
+  audio.src = url;
+  audio.play().catch(err => console.log('Autoplay blocked:', err));
+}
 
-function startCountdown() {
-  let timeLeft = 30;
-  let isRunning = false;
-  let timer = null;    
-  const countdownElement = document.getElementById("countdown");
+//Changes the color of the guess circles
+function updateCircle(round, isCorrect) {
+    const circle = document.getElementById(`guess${round}`);
+    if (circle) circle.style.backgroundColor = isCorrect ? 'green' : 'red';
+}
 
+function nextRound() {
+    fetch('/api/next-round')
+    .then(response => {
+        if (!response.ok) throw new Error('Failed to get next round');
+        return response.json();
+    })
+    .then(data => {
+        console.log('Next round:', data);
+        playAudio(data.preview_url);
+    })
+    .catch(error => {
+        console.error('Error loading next round:', error);
+    });
+}
+
+let timeLeft = 30;
+let isRunning = false;
+let timer = null;
+
+/*function startSlider(value){
+  const slider = document.getElementById("slider");
+  const fill = document.getElementById("fill");
+  const knob = document.getElementById("slider-knob");
+
+  const sliderWidth = slider.offsetWidth;
+  const percentage = (value / 30); // 0 → 1
+  const knobX = sliderWidth * percentage;
+
+  // update fill
+  fill.style.width = `${percentage * 100}%`;
+
+  // update knob position
+  knob.style.left = `${knobX}px`;
+
+}*/
+
+
+function startCountdown() {   
   if (!isRunning) {
     // start or resume
     isRunning = true;
+    const countdownElement = document.getElementById("countdown");
 
     timer = setInterval(() => {
       timeLeft--;
@@ -137,12 +210,9 @@ function startCountdown() {
       }
     }, 1000);
 
-  } else {
-    // pause countdown
-    clearInterval(timer);
-    isRunning = false;
-  }
+  } 
 }
+
 
 
 
