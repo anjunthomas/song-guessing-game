@@ -17,6 +17,28 @@ function showGameScreen() {
     document.getElementById('game-screen').style.display = 'block';
 }
 
+function showResultScreen(track, guess, artist, album, imageUrl) {
+    hideAllScreens();
+    document.getElementById('result-screen').style.display = 'block';
+
+    document.getElementById('correct-track').textContent = track;
+    document.getElementById('user-guess').textContent = guess;
+    document.getElementById('artist-name').textContent = artist;
+    document.getElementById('album-name').textContent = album;
+    document.getElementById('album-cover').src = imageUrl;
+} 
+
+//for testing:
+/*
+showResultScreen(
+    "Dangerous Woman",
+    "User Guess",
+    "Ariana Grande",
+    "Dangerous Woman",
+    "https://www.udiscovermusic.com/wp-content/uploads/2019/05/Ariana-Grande-Dangerous-Woman-album-cover-web-optimised-820-820x820.jpg"
+);
+*/
+
 function testScreen(screenName) {
     hideAllScreens();
     document.getElementById(screenName + '-screen').style.display = 'block';
@@ -40,6 +62,9 @@ document.getElementById('game-screen').style.display = 'block';
     and then using the /api/start-game route to create a POST fetch request
 
 */
+
+let currentUsername = ""; //global variable to store current username
+
 function startGame() {
     const username = document.getElementById('username').value;
     const artist = document.getElementById('artist').value;
@@ -47,6 +72,8 @@ function startGame() {
         alert('Please enter both username and artist name!');
         return;
     }
+
+    currentUsername = username; //stores current username for later use
 
     //POST fetch request to start the game
     fetch('/api/start-game', {
@@ -144,8 +171,17 @@ function startCountdown() {
   }
 }
 
-
-
-
-
-
+function startNextRound() {
+    fetch('api/next-round', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json' },
+        body: JSON.stringify({username: currentUsername})
+    })
+    .then(response => response.json())
+    .then(newRoundData => {
+        startRound(newRoundData);
+    })
+    .catch(error => {
+        console.error('Error starting next round: ', error);
+    });
+}
