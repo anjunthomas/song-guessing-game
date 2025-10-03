@@ -7,30 +7,54 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div id="home-screen">
-        <button onclick="showSetupScreen()">Start Playing</button>
-        <button onclick="showScores()">View Scores</button>
-        <div id="scores-display" style="display: none;"></div>
+    <div id="container">
+        <h1 id="main-title">Song Guessing Game</h1>
+        <div id="home-screen" class="white-box">
+            <p>Choose an artist. <br> Guess the song. <br> Rank against other players!</p>
+            <button class="button" onclick="showSetupScreen()">Start Playing</button>
+            <button class="button" onclick="showScores()">View Scores</button>
+        </div>
+
+    <div id="setup-screen" style="display: none" class="white-box">
+        <div class="form-setup-screen">
+            <h2>Choose an artist!</h2>
+            <input type="text" id="username" placeholder="Enter your name">
+            <input type="text" id="artist" placeholder="Enter artist name">
+            <button class="button" onclick="startGame()">Start Game</button>
+        </div>
     </div>
 
-    <div id="setup-screen" style="display: none;">
-        <input type="text" id="username" placeholder="Enter your name">
-        <input type="text" id="artist" placeholder="Enter artist name">
-        <button onclick="startGame()">Start Game</button>
-    </div>
-
-    <div id="game-screen" style="display: none;">
-        <p>Game Screen</p>
+    <div id="game-screen" style="display: none;" class="white-box">
+        <p id="time-left">Time Left:</p>
+        <p id="countdown">30</p>
+        <p id="guesses">Guesses</p>
+        <div id="guess1"></div>
+        <div id="guess2"></div>
+        <div id="guess3"></div>
+        <div id="fill"></div>
+        <div id="slider"></div>
+        <div id="slider-knob"></div>
+        <div id="play-button" onclick="startCountdown()"></div>
+        <button id="search">Search</button>
+        <input type="text" id="guess-input" placeholder="Guess the Song Title.">
         <audio></audio>
     </div>
 
-    <div id="result-screen" style="display: none;">
-        <p>Result Screen</p>
+    <div id="result-screen" style="display: none;" class="white-box">
+        <img id="album-cover" src="" alt="Album Cover" class="album-cover">
+
+        <p><strong>Track:</strong> <span id="correct-track"></span></p>
+        <p><strong>You guessed:</strong> <span id="user-guess"></span></p>
+        <p><strong>Artist:</strong> <span id="artist-name"></span></p>
+        <p><strong>Album:</strong> <span id="album-name"></span></p>
+
+        <button class="button" onclick="startNextRound()">Start Next Round</button>
     </div>
 
-    <div id="gameover-screen" style="display: none;">
+    <div id="gameover-screen" style="display: none;" class="white-box">
         <p>Game Over Screen</p>
     </div>
     <script src="game.js"></script>
+    </div>
 </body>
 </html>
