@@ -12,9 +12,21 @@ function showSetupScreen() {
     document.getElementById('setup-screen').style.display = 'block';
 }
 
+function showHomeScreen() {
+    hideAllScreens();
+    document.getElementById('home-screen').style.display = 'block';
+}
+
 function showGameScreen() {
     hideAllScreens();
+    document.getElementById('final-score').textContent = score;
     document.getElementById('game-screen').style.display = 'block';
+}
+
+function showGameOverScreen() {
+    hideAllScreens();
+    document.getElementById('final-score').textContent = score;
+    document.getElementById('gameover-screen').style.display = 'block';
 }
 
 function testScreen(screenName) {
@@ -40,6 +52,9 @@ document.getElementById('game-screen').style.display = 'block';
     and then using the /api/start-game route to create a POST fetch request
 
 */
+
+let score = 0; /*default that will be changed later*/
+
 function startGame() {
     const username = document.getElementById('username').value;
     const artist = document.getElementById('artist').value;
@@ -94,7 +109,8 @@ function startRound(roundData) {
 
     startCountdown();
     playAudio(roundData.preview_url);
-    document.getElementById('real-score').textContent = roundData.score;
+    score = roundData.score;
+    document.getElementById('real-score').textContent = score;
 
     
     /* put game logic here 
@@ -136,6 +152,8 @@ function submitGuess(){
 
         updateCircle(data.round, data.is_correct);
 
+        score = data.score;
+ 
         alert(data.message);
     })
     .catch(error => {
@@ -176,24 +194,6 @@ let timeLeft = 30;
 let isRunning = false;
 let timer = null;
 
-/*function startSlider(value){
-  const slider = document.getElementById("slider");
-  const fill = document.getElementById("fill");
-  const knob = document.getElementById("slider-knob");
-
-  const sliderWidth = slider.offsetWidth;
-  const percentage = (value / 30); // 0 → 1
-  const knobX = sliderWidth * percentage;
-
-  // update fill
-  fill.style.width = `${percentage * 100}%`;
-
-  // update knob position
-  knob.style.left = `${knobX}px`;
-
-}*/
-
-
 function startCountdown() {   
   if (!isRunning) {
     // start or resume
@@ -207,6 +207,7 @@ function startCountdown() {
       if (timeLeft <= 0) {
         clearInterval(timer);
         isRunning = false;
+        showGameOverScreen();
       }
     }, 1000);
 

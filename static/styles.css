@@ -175,6 +175,55 @@ h2 { /* Choose an artist */
     font-size: 20px;
 }
 
+#gameover-screen {
+  background-color: white;
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  width: 350px;
+}
+
+#game-over{
+  font-size: 32px;
+  color:rgb(41, 88, 49);
+  margin-bottom: 30px;
+}
+
+#final-score-message{
+  font-size: 32px;
+  color:rgb(41, 88, 49);
+  margin-bottom: 30px;
+}
+
+#final-score{
+  font-size: 32px;
+  color:rgb(41, 88, 49);
+  margin-bottom: 30px;
+}
+
+#try-again{
+    background-color:#6ddad4;
+    color: white;
+    height: 40px;
+    width: 100px;
+    border-color: #6ddad4;
+    border-radius: 10px;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+#home-button{
+    background-color:#6ddad4;
+    color: white;
+    height: 40px;
+    width: 100px;
+    border-color: #6ddad4;
+    border-radius: 10px;
+    font-size: 20px;
+    cursor: pointer;
+}
+
 input { /* input boxes */
   padding: 10px;
   font-size: 16px;

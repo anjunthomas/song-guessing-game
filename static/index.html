@@ -51,7 +51,10 @@
     </div>
 
     <div id="gameover-screen" style="display: none;">
-        <p>Game Over Screen</p>
+        <p id="game-over">Game Over!</p>
+        <p id="final-score-message">Final Score: <span id="final-score">0</span></p>
+        <button id="try-again" onclick="showSetupScreen()">Try Again</button>
+        <button id="home-button" onclick="showHomeScreen()">Home</button>
     </div>
     <script src="game.js"></script>
 </body>
