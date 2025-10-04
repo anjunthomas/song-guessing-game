@@ -12,6 +12,40 @@ function showSetupScreen() {
     document.getElementById('setup-screen').style.display = 'block';
 }
 
+function showHomeScreen() {
+    hideAllScreens();
+    document.getElementById('home-screen').style.display = 'block';
+}
+
+function showGameScreen() {
+    hideAllScreens();
+    document.getElementById('final-score').textContent = score;
+    document.getElementById('game-screen').style.display = 'block';
+}
+
+
+function showResultScreen(track, guess, artist, album, imageUrl) {
+    hideAllScreens();
+    document.getElementById('result-screen').style.display = 'block';
+
+    document.getElementById('correct-track').textContent = track;
+    document.getElementById('user-guess').textContent = guess;
+    document.getElementById('artist-name').textContent = artist;
+    document.getElementById('album-name').textContent = album;
+    document.getElementById('album-cover').src = imageUrl;
+} 
+
+function showGameOverScreen() {
+    hideAllScreens();
+    document.getElementById('final-score').textContent = score;
+    document.getElementById('gameover-screen').style.display = 'block';
+}
+
+
+function testScreen(screenName) {
+    hideAllScreens();
+    document.getElementById(screenName + '-screen').style.display = 'block';
+}
 /* 
 HOW TO SHOW/HIDE SCREENS:
 
@@ -32,6 +66,51 @@ document.getElementById('game-screen').style.display = 'block';
 
 */
 
+let score = 0; /*default that will be changed later*/
+let currentGameData = null
+
+
+function startGame() {
+    const username = document.getElementById('username').value;
+    const artist = document.getElementById('artist').value;
+    if (!username || !artist) {
+        alert('Please enter both username and artist name!');
+        return;
+    }
+  
+    //POST fetch request to start the game
+    fetch('/api/start-game', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            username: username,
+            artist: artist
+        })
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Failed to start game');
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('Game started:', data);
+        currentGameData = data;
+        startRound(data); //game starts
+    })
+    .catch(error => {
+        console.error('Error starting game: ', error);
+        alert('Failed to start game. Please try again.');
+    })
+}
+
+/*
+function startGame(){
+    hideAllScreens();
+    showGameScreen();
+}
+    */
+
 function startRound(roundData) {
     hideAllScreens();
     document.getElementById('game-screen').style.display = 'block';
@@ -44,6 +123,11 @@ function startRound(roundData) {
         roundData.score = current score
     */
 
+    startCountdown();
+    playAudio(roundData.preview_url);
+    score = roundData.score;
+    document.getElementById('real-score').textContent = score;
+
     
     /* put game logic here 
     should display round number and artist name
@@ -55,6 +139,121 @@ function startRound(roundData) {
     */
 }
 
+function submitGuess(){
+    let currentGameId = currentGameData.game_id;
+    const guess = document.getElementById('guess-input').value;
+
+    if (!guess) {
+        alert('Please enter a guess!');
+        return;
+    }
+
+    fetch('/api/submit-guess', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      game_id: currentGameId,
+      guess: guess
+    })
+  })
+
+  .then(response => {
+        if (!response.ok) {
+            throw new Error('Failed to submit guess');
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('Guess submitted:', data);
+
+        updateCircle(data.round, data.is_correct);
+
+        score = data.score;
+        if (data.message === "Game completed!") {
+          showGameOverScreen();
+        } else {
+          document.getElementById('guess-input').value = ''; // clearing input here
+          playAudio(data.preview_url);
+          timeLeft = 30; // resetting the timer
+        }
+    })
+    .catch(error => {
+        console.error('Error submitting guess:', error);
+        alert('Failed to submit guess. Please try again.');
+    });
+}
+
+//function to play the audio
+function playAudio(url) {
+  const audio = document.getElementById('audio-preview');
+  audio.src = url;
+  audio.play().catch(err => console.log('Autoplay blocked:', err));
+}
+
+//Changes the color of the guess circles
+function updateCircle(round, isCorrect) {
+    const circle = document.getElementById(`guess${round}`);
+    if (circle) circle.style.backgroundColor = isCorrect ? 'green' : 'red';
+}
+
+/*
+function nextRound() {
+    fetch('/api/next-round')
+    .then(response => {
+        if (!response.ok) throw new Error('Failed to get next round');
+        return response.json();
+    })
+    .then(data => {
+        console.log('Next round:', data);
+        playAudio(data.preview_url);
+    })
+    .catch(error => {
+        console.error('Error loading next round:', error);
+    });
+}
+*/
+
+let timeLeft = 30;
+let isRunning = false;
+let timer = null;
+
+function startCountdown() {   
+  if (!isRunning) {
+    // start or resume
+    isRunning = true;
+    const countdownElement = document.getElementById("countdown");
+
+    timer = setInterval(() => {
+      timeLeft--;
+      countdownElement.textContent = timeLeft;
+
+      if (timeLeft <= 0) {
+        clearInterval(timer);
+        isRunning = false;
+        showGameOverScreen();
+      }
+    }, 1000);
+
+  } 
+}
+
+
+/*
+function startNextRound() {
+    fetch('api/next-round', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json' },
+        body: JSON.stringify({username: currentUsername})
+    })
+    .then(response => response.json())
+    .then(newRoundData => {
+        startRound(newRoundData);
+    })
+    .catch(error => {
+        console.error('Error starting next round: ', error);
+    });
+}
+*/
 
 
 

@@ -20,7 +20,8 @@ def index():
 # Ex route. '/anju' 
 # push to your branch to verify flask is working
 
-#example route to show POST request 
+#example route to show POST request
+'''
 @app.route('/test', methods=['POST'])
 def test_route():
     data = request.get_json()
@@ -29,6 +30,8 @@ def test_route():
     return jsonify({
         "message": f"Hello, {name}! Your request was received successfully."
     })
+'''
+
 
 # thaira's personal route following example above
 @app.route('/thaira')
@@ -148,7 +151,7 @@ def add_data():
 def get_artist_songs(artist_name):
     try:
         artist = urllib.parse.quote(artist_name)
-        url = f"https://itunes.apple.com/search?term={artist}&media=music&entity=song&limit=5"
+        url = f"https://itunes.apple.com/search?term={artist}&media=music&entity=song&limit=10"
         response = requests.get(url)
 
         # check if request worked
@@ -166,7 +169,7 @@ def get_artist_songs(artist_name):
             if "previewUrl" in song:
                 songs.append(song)
 
-        return random.sample(songs, min(3, len(songs)))
+        return random.sample(songs, min(5, len(songs)))
     
     except Exception as e:
         print(f"Error in get_artist_songs: {str(e)}")
@@ -256,7 +259,7 @@ def submit_guess():
         score = game.get('score', 0)
         
         # validate round and songs
-        if current_round > 3 or current_round < 1:
+        if current_round > 5 or current_round < 1: #changed this for testing
             return jsonify({"error": "Game has ended or invalid round."}), 400
         
         if not songs or len(songs) < current_round:
@@ -273,27 +276,38 @@ def submit_guess():
         if is_correct:
             score += 10
             game_sessions[game_id]['score'] = score
+            
+        next_round = current_round + 1
+        
+        next_preview_url = ''
+        if next_round <= 5 and next_round <= len(songs):
+            next_preview_url = songs[next_round - 1].get('previewUrl', '')
+            game_sessions[game_id]['current_round'] = next_round
+            message = f"Round {next_round} of 5"
+        else:
+            message = "Game completed!"
+            # Save score to database
+            try:
+                connection = sqlite3.connect('database.db')
+                cursor = connection.cursor()
+                cursor.execute(
+                    'INSERT INTO scores (username, score, artist) VALUES (?, ?, ?)',
+                    (game['username'], score, game['artist'])
+                )
+                connection.commit()
+                connection.close()
+            except Exception as e:
+                print(f"Error saving score: {str(e)}")
         
         # prepare response
         response = {
             "is_correct": is_correct,
             "correct_answer": correct_answer,
-            "round": current_round,
+            "round": next_round,
             "score": score,
-            "preview_url": current_song.get('previewUrl', ''),
-            "message": f"Round {current_round} of 3"
-        }
-        
-        # move to next round
-        next_round = current_round + 1
-        if next_round <= 3:
-            game_sessions[game_id]['current_round'] = next_round
-            response["message"] = f"Round {next_round} of 3"
-        else:
-            # game finished
-            response["message"] = "Game completed!"
-            # optionally save final score to database here
-        
+            "preview_url": next_preview_url,
+            "message": message
+        }   
         return jsonify(response)
         
     except Exception as e:

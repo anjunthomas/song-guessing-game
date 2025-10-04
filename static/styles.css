@@ -1,0 +1,263 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #e2f7f3;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  /*cursor: url('https://cdn-icons-png.freepik.com/512/10742/10742274.png?ga=GA1.1.237091776.1758978295'), auto; /* custom music note cursor, not working */
+}
+
+.white-box { /* white box for all screens */
+  text-align: center;
+  background-color: white;
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 350px;
+  margin: 50px auto;
+  font-family: 'Arial', sans-serif;
+  color: #1c3d36;
+}
+
+#main-title { /* Song Guessing Game Title */
+  text-align: center;
+  width: 100%;
+  margin: 40px auto 20px auto;
+  font-family: Arial, sans-serif;
+  color: #1c3d36;
+  font-size: 40px;
+  white-space: nowrap;
+}
+
+#container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 350px;
+  margin: 0 auto;
+}
+
+h2 { /* Choose an artist */
+  font-size: 20px;
+  color:rgb(41, 88, 49);
+  align-self: center;
+  margin-bottom: 10px;
+}
+
+.button {
+  background-color: #6ddad4;
+  padding: 12px 24px;
+  border: none;
+  color: white;
+  font-size: 16px;
+  font-family: Arial, sans-serif;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 4px 5px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease;
+}
+
+.button:hover {
+  background-color: #5cb8b1;
+}
+
+.form-setup-screen { /* column for input boxes */
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+#game-screen{
+    background-color: white;
+    width: 1100px;
+    height: 450px;
+    box-shadow: 0px 3px 4px rgba(52, 53, 53, 0.932);
+    padding-top: 10px;
+    padding-bottom: 10px;
+
+    display: flex;
+    flex-direction: column;  
+    align-items: center;  
+    gap: 20px;   
+}
+
+#top-row{ /*contains time-left and countdown*/
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 20px;
+  align-items: center;
+}
+
+#middle-row{ /*contains guess-input, search, and controls*/
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 20px;
+  align-items: center;
+  margin-left: 120px;
+}
+
+#bottom-row{ /*contains guesses and score*/
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+
+#controls{ /*contains audio controls*/
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+#time-left{
+    color: rgb(41, 88, 49);
+    font-size: 40px;
+}
+
+#countdown{
+    color: rgb(41, 88, 49);
+    font-size: 40px;
+}
+
+#guesses{
+    color: rgb(41, 88, 49);
+    font-size: 40px;
+}
+
+#guess1{
+    width: 40px;
+    height: 40px;
+    background-color: white;
+    border-radius: 50%;
+    border: 2px solid black;
+}
+
+#guess2{
+    width: 40px;
+    height: 40px;
+    background-color: white;
+    border-radius: 50%;
+    border: 2px solid black;
+}
+
+#guess3{
+    width: 40px;
+    height: 40px;
+    background-color: white;
+    border-radius: 50%;
+    border: 2px solid black;
+}
+
+#score{
+    color: rgb(41, 88, 49);
+    font-size: 40px;
+    margin-left: 80px;
+}
+
+#real-score{ /*changeable score number*/
+    color: rgb(41, 88, 49);
+    font-size: 40px;
+}
+
+
+#search{
+    background-color:#6ddad4;
+    color: white;
+    height: 40px;
+    width: 100px;
+    border-color: #6ddad4;
+    border-radius: 10px;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+#guess-input{
+    height: 40px;
+    width: 350px;
+    font-size: 20px;
+}
+
+#gameover-screen {
+  background-color: white;
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  width: 350px;
+}
+
+#game-over{
+  font-size: 32px;
+  color:rgb(41, 88, 49);
+  margin-bottom: 30px;
+}
+
+#final-score-message{
+  font-size: 32px;
+  color:rgb(41, 88, 49);
+  margin-bottom: 30px;
+}
+
+#final-score{
+  font-size: 32px;
+  color:rgb(41, 88, 49);
+  margin-bottom: 30px;
+}
+
+#try-again{
+    background-color:#6ddad4;
+    color: white;
+    height: 40px;
+    width: 100px;
+    border-color: #6ddad4;
+    border-radius: 10px;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+#home-button{
+    background-color:#6ddad4;
+    color: white;
+    height: 40px;
+    width: 100px;
+    border-color: #6ddad4;
+    border-radius: 10px;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+input { /* input boxes */
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.album-cover { /* album cover image on result screen */
+  width: 150px;
+  height: auto;
+  margin: 20px 0;
+  border-radius: 8px;
+}
+
+#result-screen.white-box { /* bigger white box for result screen */
+  width: 500px;
+}
+
+#result-screen p { /* small text on result screen */
+  font-size: 18px;
+  margin: 8px 0;
+}
+
+#result-screen strong { /* bold text on result screen */
+  font-weight: 600;
+}
