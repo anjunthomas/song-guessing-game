@@ -26,6 +26,15 @@ def test_route():
     })
 '''
 
+#fetch request
+@app.route('/api/start-game', methods=['POST'])
+def test_route():
+    data = request.get_json()
+    name = data.get("username", "artist")
+    
+    return jsonify({
+        "message": f"Hello, {name}! Your request was received successfully."
+    })
 
 if __name__ == '__main__':
     app.run(debug=True)

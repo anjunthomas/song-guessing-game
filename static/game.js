@@ -23,11 +23,24 @@ function showGameScreen() {
     document.getElementById('game-screen').style.display = 'block';
 }
 
+
+function showResultScreen(track, guess, artist, album, imageUrl) {
+    hideAllScreens();
+    document.getElementById('result-screen').style.display = 'block';
+
+    document.getElementById('correct-track').textContent = track;
+    document.getElementById('user-guess').textContent = guess;
+    document.getElementById('artist-name').textContent = artist;
+    document.getElementById('album-name').textContent = album;
+    document.getElementById('album-cover').src = imageUrl;
+} 
+
 function showGameOverScreen() {
     hideAllScreens();
     document.getElementById('final-score').textContent = score;
     document.getElementById('gameover-screen').style.display = 'block';
 }
+
 
 function testScreen(screenName) {
     hideAllScreens();
@@ -54,6 +67,8 @@ document.getElementById('game-screen').style.display = 'block';
 */
 
 let score = 0; /*default that will be changed later*/
+let currentGameData = null
+
 
 function startGame() {
     const username = document.getElementById('username').value;
@@ -62,7 +77,7 @@ function startGame() {
         alert('Please enter both username and artist name!');
         return;
     }
-
+  
     //POST fetch request to start the game
     fetch('/api/start-game', {
         method: 'POST',
@@ -80,6 +95,7 @@ function startGame() {
     })
     .then(data => {
         console.log('Game started:', data);
+        currentGameData = data;
         startRound(data); //game starts
     })
     .catch(error => {
@@ -124,7 +140,7 @@ function startRound(roundData) {
 }
 
 function submitGuess(){
-    let currentGameId = document.getElementById('username').value;
+    let currentGameId = currentGameData.game_id;
     const guess = document.getElementById('guess-input').value;
 
     if (!guess) {
@@ -153,8 +169,13 @@ function submitGuess(){
         updateCircle(data.round, data.is_correct);
 
         score = data.score;
- 
-        alert(data.message);
+        if (data.message === "Game completed!") {
+          showGameOverScreen();
+        } else {
+          document.getElementById('guess-input').value = ''; // clearing input here
+          playAudio(data.preview_url);
+          timeLeft = 30; // resetting the timer
+        }
     })
     .catch(error => {
         console.error('Error submitting guess:', error);
@@ -175,6 +196,7 @@ function updateCircle(round, isCorrect) {
     if (circle) circle.style.backgroundColor = isCorrect ? 'green' : 'red';
 }
 
+/*
 function nextRound() {
     fetch('/api/next-round')
     .then(response => {
@@ -189,6 +211,7 @@ function nextRound() {
         console.error('Error loading next round:', error);
     });
 }
+*/
 
 let timeLeft = 30;
 let isRunning = false;
@@ -215,7 +238,22 @@ function startCountdown() {
 }
 
 
-
+/*
+function startNextRound() {
+    fetch('api/next-round', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json' },
+        body: JSON.stringify({username: currentUsername})
+    })
+    .then(response => response.json())
+    .then(newRoundData => {
+        startRound(newRoundData);
+    })
+    .catch(error => {
+        console.error('Error starting next round: ', error);
+    });
+}
+*/
 
 
 
