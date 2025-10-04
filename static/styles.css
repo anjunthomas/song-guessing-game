@@ -4,8 +4,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
-  /*cursor: url('https://cdn-icons-png.freepik.com/512/10742/10742274.png?ga=GA1.1.237091776.1758978295'), auto; /* custom music note cursor, not working */
+  cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32'><text y='24' font-size='24'>🎵</text></svg>") 0 0, auto; /* emoji music note cursor */
 }
 
 .white-box { /* white box for all screens */
@@ -14,8 +13,7 @@ body {
   padding: 40px;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  width: 350px;
-  margin: 50px auto;
+  width: 400px;
   font-family: 'Arial', sans-serif;
   color: #1c3d36;
 }
@@ -36,8 +34,11 @@ body {
   align-items: center;
   justify-content: center;
   height: 100vh;
-  width: 350px;
   margin: 0 auto;
+}
+
+#home-screen {
+  font-size: 30px;
 }
 
 h2 { /* Choose an artist */
@@ -56,12 +57,13 @@ h2 { /* Choose an artist */
   font-family: Arial, sans-serif;
   border-radius: 8px;
   font-weight: bold;
-  cursor: pointer;
+  cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32'><text y='24' font-size='24'>🎶</text></svg>") 0 0, auto; /* emoji music note cursor changes on hover */
   box-shadow: 0 4px 5px rgba(0, 0, 0, 0.1);
   transition: background-color 0.3s ease;
 }
 
 .button:hover {
+  cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32'><text y='24' font-size='24'>🎶</text></svg>") 0 0, auto; /* emoji music note cursor changes on hover */
   background-color: #5cb8b1;
 }
 
@@ -100,6 +102,7 @@ h2 { /* Choose an artist */
   gap: 20px;
   align-items: center;
   margin-left: 120px;
+  cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32'><text y='24' font-size='24'>🎶</text></svg>") 0 0, auto; /* emoji music note cursor changes on hover */
 }
 
 #bottom-row{ /*contains guesses and score*/
@@ -177,7 +180,7 @@ h2 { /* Choose an artist */
     border-color: #6ddad4;
     border-radius: 10px;
     font-size: 20px;
-    cursor: pointer;
+    cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32'><text y='24' font-size='24'>🎶</text></svg>") 0 0, auto; /* emoji music note cursor changes on hover */
 }
 
 #guess-input{
@@ -221,7 +224,7 @@ h2 { /* Choose an artist */
     border-color: #6ddad4;
     border-radius: 10px;
     font-size: 20px;
-    cursor: pointer;
+    cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32'><text y='24' font-size='24'>🎶</text></svg>") 0 0, auto; /* emoji music note cursor changes on hover */
 }
 
 #home-button{
@@ -232,7 +235,7 @@ h2 { /* Choose an artist */
     border-color: #6ddad4;
     border-radius: 10px;
     font-size: 20px;
-    cursor: pointer;
+    cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32'><text y='24' font-size='24'>🎶</text></svg>") 0 0, auto; /* emoji music note cursor changes on hover */
 }
 
 input { /* input boxes */
