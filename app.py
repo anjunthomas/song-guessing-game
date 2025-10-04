@@ -188,7 +188,8 @@ def create_game_session(username, artist, songs):
         "songs": songs,
         "current_round": 1,
         "total_rounds": len(songs),
-        "score": 0
+        "score": 0,
+        "guesses_remaining": 3
     }
 
     # add session dict into global game_sessions
@@ -257,6 +258,7 @@ def submit_guess():
         current_round = game.get('current_round', 1)
         songs = game.get('songs', [])
         score = game.get('score', 0)
+        guesses_remaining = game.get('guesses_remaining', 3)
         
         # validate round and songs
         if current_round > 5 or current_round < 1: #changed this for testing
@@ -276,28 +278,62 @@ def submit_guess():
         if is_correct:
             score += 10
             game_sessions[game_id]['score'] = score
-            
-        next_round = current_round + 1
-        
-        next_preview_url = ''
-        if next_round <= 5 and next_round <= len(songs):
-            next_preview_url = songs[next_round - 1].get('previewUrl', '')
-            game_sessions[game_id]['current_round'] = next_round
-            message = f"Round {next_round} of 5"
+            next_round = current_round + 1
+            game_sessions[game_id]['guesses_remaining'] = 3
+            next_preview_url = ''
+
+            if next_round <= 5 and next_round <= len(songs):
+                next_preview_url = songs[next_round - 1].get('previewUrl', '')
+                game_sessions[game_id]['current_round'] = next_round
+                message = f"Round {next_round} of 5"
+            else:
+                message = "Game completed!"
+                # Save score to database
+                try:
+                    connection = sqlite3.connect('database.db')
+                    cursor = connection.cursor()
+                    cursor.execute(
+                        'INSERT INTO scores (username, score, artist) VALUES (?, ?, ?)',
+                        (game['username'], score, game['artist'])
+                    )
+                    connection.commit()
+                    connection.close()
+                except Exception as e:
+                    print(f"Error saving score: {str(e)}")
+
         else:
-            message = "Game completed!"
-            # Save score to database
-            try:
-                connection = sqlite3.connect('database.db')
-                cursor = connection.cursor()
-                cursor.execute(
-                    'INSERT INTO scores (username, score, artist) VALUES (?, ?, ?)',
-                    (game['username'], score, game['artist'])
-                )
-                connection.commit()
-                connection.close()
-            except Exception as e:
-                print(f"Error saving score: {str(e)}")
+            guesses_remaining -= 1
+            game_sessions[game_id]['guesses_remaining'] = guesses_remaining
+            
+            # Out of guesses - move to next round
+            if guesses_remaining <= 0:
+                next_round = current_round + 1
+                game_sessions[game_id]['guesses_remaining'] = 3  # Reset for next round
+                
+                if next_round <= 5 and next_round <= len(songs):
+                    game_sessions[game_id]['current_round'] = next_round
+                    next_preview_url = songs[next_round - 1].get('previewUrl', '')
+                    message = f"Out of guesses! Moving to round {next_round} of 5"
+                else:
+                    next_preview_url = ''
+                    message = "Game completed!"
+                    # Save score to database
+                    try:
+                        connection = sqlite3.connect('database.db')
+                        cursor = connection.cursor()
+                        cursor.execute(
+                            'INSERT INTO scores (username, score, artist) VALUES (?, ?, ?)',
+                            (game['username'], score, game['artist'])
+                        )
+                        connection.commit()
+                        connection.close()
+                    except Exception as e:
+                        print(f"Error saving score: {str(e)}")
+            
+            else:
+                next_round = current_round
+                next_preview_url = current_song.get('previewUrl', '')  # Same song
+                message = f"Incorrect! {guesses_remaining} guesses remaining"            
         
         # prepare response
         response = {
@@ -305,8 +341,12 @@ def submit_guess():
             "correct_answer": correct_answer,
             "round": next_round,
             "score": score,
+            "guesses_remaining": guesses_remaining if not is_correct else 3,
             "preview_url": next_preview_url,
-            "message": message
+            "message": message,
+            "artist_name": current_song.get('artistName', ''),
+            "album_name": current_song.get('collectionName', ''),
+            "album_cover": current_song.get('artworkUrl100', '')
         }   
         return jsonify(response)
         
