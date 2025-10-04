@@ -243,13 +243,11 @@ function startCountdown() {
       if (timeLeft <= 0) {
         clearInterval(timer);
         isRunning = false;
-        showGameOverScreen();
+        
+        //console.log("Time is up");
+        //guessesUsed++;
+        //updateCircle(false);   
       }
     }, 1000);
-
   } 
 }
-
-
-
-
