@@ -74,37 +74,63 @@ h2 { /* Choose an artist */
 #game-screen{
     background-color: white;
     width: 1100px;
-    height: 400px;
-    margin: 70px auto;
+    height: 450px;
     box-shadow: 0px 3px 4px rgba(52, 53, 53, 0.932);
     padding-top: 10px;
-    padding-bottom: 60px;
+    padding-bottom: 10px;
 
+    display: flex;
+    flex-direction: column;  
+    align-items: center;  
+    gap: 20px;   
+}
+
+#top-row{ /*contains time-left and countdown*/
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 20px;
+  align-items: center;
+}
+
+#middle-row{ /*contains guess-input, search, and controls*/
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 20px;
+  align-items: center;
+  margin-left: 120px;
+}
+
+#bottom-row{ /*contains guesses and score*/
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+
+#controls{ /*contains audio controls*/
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-top: 20px;
 }
 
 #time-left{
-    text-align: center;
-    color: rgb(4, 54, 37);
+    color: rgb(41, 88, 49);
     font-size: 40px;
-    font-family: 'Cooper';
 }
 
 #countdown{
-    position: absolute;
-    right: 600px;
-    top: 235px;
-    color: rgb(4, 54, 37);
+    color: rgb(41, 88, 49);
     font-size: 40px;
-    font-family: 'Cooper';
 }
 
 #guesses{
-    position: absolute;
-    left: 350px;
-    top: 400px;
-    color: rgb(4, 54, 37);
+    color: rgb(41, 88, 49);
     font-size: 40px;
-    font-family: 'Cooper';
 }
 
 #guess1{
@@ -113,9 +139,6 @@ h2 { /* Choose an artist */
     background-color: white;
     border-radius: 50%;
     border: 2px solid black;
-    position: absolute;
-    top: 500px;
-    left: 300px;
 }
 
 #guess2{
@@ -124,9 +147,6 @@ h2 { /* Choose an artist */
     background-color: white;
     border-radius: 50%;
     border: 2px solid black;
-    position: absolute;
-    top: 500px;
-    left: 400px;
 }
 
 #guess3{
@@ -135,84 +155,84 @@ h2 { /* Choose an artist */
     background-color: white;
     border-radius: 50%;
     border: 2px solid black;
-    position: absolute;
-    top: 500px;
-    left: 500px;
 }
 
-#search {
-    background-color:rgb(4, 54, 37);
+#score{
+    color: rgb(41, 88, 49);
+    font-size: 40px;
+    margin-left: 80px;
+}
+
+#real-score{ /*changeable score number*/
+    color: rgb(41, 88, 49);
+    font-size: 40px;
+}
+
+
+#search{
+    background-color:#6ddad4;
     color: white;
     height: 40px;
     width: 100px;
+    border-color: #6ddad4;
     border-radius: 10px;
     font-size: 20px;
-    font-family: 'Cooper';
-    position: absolute;
-    top: 400px;
-    right: 280px;
+    cursor: pointer;
 }
 
 #guess-input{
-    position: absolute;
-    right: 400px;
-    top: 400px;
     height: 40px;
     width: 350px;
     font-size: 20px;
 }
 
-#slider{
-    width: 350px;
-    height: 5px;
-    background-color: grey;
-    position: absolute;
-    top: 470px;
-    right: 400px;
-}
-
-#fill{
-    width: 350px;
-    height: 5px;
-    background-color: red;
-    position: absolute;
-    top: 470px;
-    right: 400px;
-}
-
-#slider-knob{
-    width: 10px;
-    height: 10px;
-    background-color: red;
-    border-radius: 50%;
-    border: 2px solid black;
-    position: absolute;
-    top: 465px;
-    right: 745px;
-}
-
-#play-button {
-  width: 40px;
-  height: 40px;
+#gameover-screen {
   background-color: white;
-  border-radius: 50%;
-  position: absolute;
-  border: 2px solid black;
-  top: 490px;
-  right: 550px;
-  cursor: pointer;
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  width: 350px;
 }
 
-#play-button::after {
-  content: '';
-  position: absolute;
-  left: 12px;
-  top: 10px;
-  width: 0;
-  height: 0;
-  border-top: 12px solid transparent;
-  border-bottom: 12px solid transparent;
-  border-left: 24px solid black;
+#game-over{
+  font-size: 32px;
+  color:rgb(41, 88, 49);
+  margin-bottom: 30px;
+}
+
+#final-score-message{
+  font-size: 32px;
+  color:rgb(41, 88, 49);
+  margin-bottom: 30px;
+}
+
+#final-score{
+  font-size: 32px;
+  color:rgb(41, 88, 49);
+  margin-bottom: 30px;
+}
+
+#try-again{
+    background-color:#6ddad4;
+    color: white;
+    height: 40px;
+    width: 100px;
+    border-color: #6ddad4;
+    border-radius: 10px;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+#home-button{
+    background-color:#6ddad4;
+    color: white;
+    height: 40px;
+    width: 100px;
+    border-color: #6ddad4;
+    border-radius: 10px;
+    font-size: 20px;
+    cursor: pointer;
 }
 
 input { /* input boxes */
