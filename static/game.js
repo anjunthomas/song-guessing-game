@@ -24,15 +24,15 @@ function showGameScreen() {
 }
 
 
-function showResultScreen(track, guess, artist, album, imageUrl) {
+function showResultScreen(correct_answer, guess, artist_name, album_name, album_cover) {
     hideAllScreens();
     document.getElementById('result-screen').style.display = 'block';
 
-    document.getElementById('correct-track').textContent = track;
+    document.getElementById('correct-answer').textContent = correct_answer;
     document.getElementById('user-guess').textContent = guess;
-    document.getElementById('artist-name').textContent = artist;
-    document.getElementById('album-name').textContent = album;
-    document.getElementById('album-cover').src = imageUrl;
+    document.getElementById('artist-name').textContent = artist_name;
+    document.getElementById('album-name').textContent = album_name;
+    document.getElementById('album-cover').src = album_cover;
 } 
 
 function showGameOverScreen() {
@@ -172,6 +172,8 @@ function submitGuess(){
         console.log('Guess submitted:', data);
 
         updateCircle(data.is_correct);
+
+        showResultScreen(data.correct_answer, guess, data.artist_name, data.album_name, data.album_cover);
 
         score = data.score;
 
