@@ -246,7 +246,7 @@ def submit_guess():
         guess = data.get('guess')
         
         # validate required fields
-        if not game_id or not guess:
+        if not game_id:
             return jsonify({"error": "Missing 'game_id' or 'guess' in request."}), 400
         
         # check if game session exists
@@ -274,6 +274,8 @@ def submit_guess():
         # check if guess is correct (case-insensitive)
         is_correct = guess.lower().strip() == correct_answer.lower().strip()
         
+        is_timeout = guess == ""
+
         # update score if correct
         if is_correct:
             score += 10
@@ -306,14 +308,14 @@ def submit_guess():
             game_sessions[game_id]['guesses_remaining'] = guesses_remaining
             
             # Out of guesses - move to next round
-            if guesses_remaining <= 0:
+            if is_timeout or guesses_remaining <= 0:
                 next_round = current_round + 1
                 game_sessions[game_id]['guesses_remaining'] = 3  # Reset for next round
                 
                 if next_round <= 5 and next_round <= len(songs):
                     game_sessions[game_id]['current_round'] = next_round
                     next_preview_url = songs[next_round - 1].get('previewUrl', '')
-                    message = f"Out of guesses! Moving to round {next_round} of 5"
+                    message = f"Time's up! Moving to round {next_round} of 5" if is_timeout else f"Out of guesses! Moving to round {next_round} of 5"
                 else:
                     next_preview_url = ''
                     message = "Game completed!"
@@ -332,7 +334,7 @@ def submit_guess():
             
             else:
                 next_round = current_round
-                next_preview_url = current_song.get('previewUrl', '')  # Same song
+                next_preview_url = current_song.get('previewUrl', '')
                 message = f"Incorrect! {guesses_remaining} guesses remaining"            
         
         # prepare response
