@@ -264,3 +264,14 @@ input { /* input boxes */
 #result-screen strong { /* bold text on result screen */
   font-weight: 600;
 }
+
+#next-round-countdown { /* result screen countdown */
+  background-color: #6ddad4;
+  padding: 12px 24px;
+  border: none;
+  color: white;
+  font-size: 16px;
+  font-family: Arial, sans-serif;
+  border-radius: 8px;
+  font-weight: bold;
+}
