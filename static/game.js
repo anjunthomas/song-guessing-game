@@ -23,7 +23,6 @@ function showGameScreen() {
     document.getElementById('game-screen').style.display = 'block';
 }
 
-
 function showResultScreen(correct_answer, guess, artist_name, album_name, album_cover) {
     hideAllScreens();
     document.getElementById('result-screen').style.display = 'block';
@@ -186,9 +185,16 @@ function submitGuess(fromTimer = false){
         score = data.score;
 
         if (data.message === "Game completed!") {
+            showResultScreen(
+                data.correct_answer, 
+                guess || "No guess entered", 
+                data.artist_name, 
+                data.album_name, 
+                data.album_cover
+                );
           setTimeout(() => {
             showGameOverScreen();
-          }, 1000);
+          }, 5000);
         } else {
             if (data.round !== currentGameData.round) {
                 console.log("Round changed, stopping timer");
