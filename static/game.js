@@ -32,7 +32,35 @@ function showResultScreen(correct_answer, guess, artist_name, album_name, album_
     document.getElementById('artist-name').textContent = artist_name;
     document.getElementById('album-name').textContent = album_name;
     document.getElementById('album-cover').src = album_cover;
+
+    startNextCountdown();
 } 
+
+function startNextCountdown() { 
+    const countdownDiv = document.getElementById('next-round-countdown');
+    const countdownNumber = document.getElementById('countdown-number');
+
+    countdownDiv.style.display = 'block';
+
+    let count = 5;
+    
+    const countdownInterval = setInterval(() => {
+        count--;
+        countdownNumber.textContent = "Next round in " + 5 + "...";
+
+        if (isGameOver) {
+            countdownNumber.textContent = "Setting up final score...";
+        } else {
+            if (count > 0) {
+                countdownNumber.textContent = "Next round in " + count + " ...";
+            } else {
+                countdownDiv.style.display = 'none';
+                clearInterval(countdownInterval);
+            }
+        }     
+    }, 1000);
+}
+
 
 function showGameOverScreen() {
     hideAllScreens();
@@ -68,6 +96,7 @@ document.getElementById('game-screen').style.display = 'block';
 let score = 0; /*default that will be changed later*/
 let currentGameData = null
 let guessesUsed = 0;
+let isGameOver = false;
 
 
 function startGame() {
@@ -79,6 +108,7 @@ function startGame() {
     }
 
     // resetting gameState when game restarts
+    isGameOver = false;
     clearInterval(timer);
     isRunning = false;
     timeLeft = 30;
@@ -185,6 +215,7 @@ function submitGuess(fromTimer = false){
         score = data.score;
 
         if (data.message === "Game completed!") {
+            isGameOver = true;
             showResultScreen(
                 data.correct_answer, 
                 guess || "No guess entered", 
@@ -233,17 +264,14 @@ function submitGuess(fromTimer = false){
                     }, 5000);
                 }, 1000);
             } else {
-                timeLeft = 30;
-                clearInterval(timer);
-                isRunning = false;
-                startCountdown();
+               console.log("guess-input").value;
             }
             document.getElementById('guess-input').value = '';
         }
     })
     .catch(error => {
         console.error('Error submitting guess:', error);
-        alert('Failed to submit guess. Please try again.');
+        //alert('Failed to submit guess. Please try again.');
     });
 }
 

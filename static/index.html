@@ -31,7 +31,7 @@
         </div>
         <div id="middle-row">
             <input type="text" id="guess-input" placeholder="Guess the Song Title.">
-            <button id="search" onclick="submitGuess()">Search</button>
+            <button id="search" onclick="submitGuess()">Guess</button>
         </div>
         <div id="controls">
             <audio id="audio-preview" controls></audio>
@@ -53,6 +53,10 @@
         <p><strong>You guessed:</strong> <span id="user-guess"></span></p>
         <p><strong>Artist:</strong> <span id="artist-name"></span></p>
         <p><strong>Album:</strong> <span id="album-name"></span></p>
+
+        <div id="next-round-countdown" style="display: none;">
+            <span id="countdown-number">Next round in in 5 ...</span>
+        </div>
     </div>
 
     <div id="gameover-screen" style="display: none;" class="white-box">
