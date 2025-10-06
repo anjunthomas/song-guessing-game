@@ -226,6 +226,7 @@ function submitGuess(fromTimer = false){
           setTimeout(() => {
             showGameOverScreen();
           }, 5000);
+          clearTimeout(timer);
         } else {
             if (data.round !== currentGameData.round) {
                 console.log("Round changed, stopping timer");
