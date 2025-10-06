@@ -200,6 +200,7 @@ h2 { /* Choose an artist */
 
 #game-over{
   font-size: 32px;
+  font-weight: bold;
   color:rgb(41, 88, 49);
   margin-bottom: 30px;
 }
@@ -270,7 +271,7 @@ input { /* input boxes */
   padding: 12px 24px;
   border: none;
   color: white;
-  font-size: 16px;
+  font-size: 20px;
   font-family: Arial, sans-serif;
   border-radius: 8px;
   font-weight: bold;
