@@ -12,6 +12,67 @@ function showSetupScreen() {
     document.getElementById('setup-screen').style.display = 'block';
 }
 
+function showHomeScreen() {
+    hideAllScreens();
+    document.getElementById('home-screen').style.display = 'block';
+}
+
+function showGameScreen() {
+    hideAllScreens();
+    document.getElementById('final-score').textContent = score;
+    document.getElementById('game-screen').style.display = 'block';
+}
+
+function showResultScreen(correct_answer, guess, artist_name, album_name, album_cover) {
+    hideAllScreens();
+    document.getElementById('result-screen').style.display = 'block';
+
+    document.getElementById('correct-answer').textContent = correct_answer;
+    document.getElementById('user-guess').textContent = guess;
+    document.getElementById('artist-name').textContent = artist_name;
+    document.getElementById('album-name').textContent = album_name;
+    document.getElementById('album-cover').src = album_cover;
+
+    startNextCountdown();
+} 
+
+function startNextCountdown() { 
+    const countdownDiv = document.getElementById('next-round-countdown');
+    const countdownNumber = document.getElementById('countdown-number');
+
+    countdownDiv.style.display = 'block';
+
+    let count = 5;
+    
+    const countdownInterval = setInterval(() => {
+        count--;
+        countdownNumber.textContent = "Next round in " + 5 + "...";
+
+        if (isGameOver) {
+            countdownNumber.textContent = "Setting up final score...";
+        } else {
+            if (count > 0) {
+                countdownNumber.textContent = "Next round in " + count + " ...";
+            } else {
+                countdownDiv.style.display = 'none';
+                clearInterval(countdownInterval);
+            }
+        }     
+    }, 1000);
+}
+
+
+function showGameOverScreen() {
+    hideAllScreens();
+    document.getElementById('final-score').textContent = score;
+    document.getElementById('gameover-screen').style.display = 'block';
+}
+
+
+function testScreen(screenName) {
+    hideAllScreens();
+    document.getElementById(screenName + '-screen').style.display = 'block';
+}
 /* 
 HOW TO SHOW/HIDE SCREENS:
 
@@ -32,7 +93,67 @@ document.getElementById('game-screen').style.display = 'block';
 
 */
 
+let score = 0; /*default that will be changed later*/
+let currentGameData = null
+let guessesUsed = 0;
+let isGameOver = false;
+
+
+function startGame() {
+    const username = document.getElementById('username').value;
+    const artist = document.getElementById('artist').value;
+    if (!username || !artist) {
+        alert('Please enter both username and artist name!');
+        return;
+    }
+
+    // resetting gameState when game restarts
+    isGameOver = false;
+    clearInterval(timer);
+    isRunning = false;
+    timeLeft = 30;
+    score = 0;
+    guessesUsed = 0;
+    currentGameData = null;
+  
+    //POST fetch request to start the game
+    fetch('/api/start-game', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            username: username,
+            artist: artist
+        })
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Failed to start game');
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('Game started:', data);
+        currentGameData = data;
+        startRound(data); //game starts
+    })
+    .catch(error => {
+        console.error('Error starting game: ', error);
+        alert('Failed to start game. Please try again.');
+    })
+}
+
+/*
+function startGame(){
+    hideAllScreens();
+    showGameScreen();
+}
+    */
+
 function startRound(roundData) {
+    guessesUsed = 0;
+    document.getElementById('guess1').style.backgroundColor = 'white';
+    document.getElementById('guess2').style.backgroundColor = 'white';
+    document.getElementById('guess3').style.backgroundColor = 'white';
     hideAllScreens();
     document.getElementById('game-screen').style.display = 'block';
 
@@ -43,6 +164,11 @@ function startRound(roundData) {
         roundData.preview_url = sound audio url
         roundData.score = current score
     */
+
+    startCountdown();
+    playAudio(roundData.preview_url);
+    score = roundData.score;
+    document.getElementById('real-score').textContent = score;
 
     
     /* put game logic here 
@@ -55,7 +181,138 @@ function startRound(roundData) {
     */
 }
 
+function submitGuess(fromTimer = false){
+    let currentGameId = currentGameData.game_id;
+    const guess = document.getElementById('guess-input').value;
 
+    if (!guess && !fromTimer) {
+        alert('Please enter a guess!');
+        return;
+    }
 
+    fetch('/api/submit-guess', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      game_id: currentGameId,
+      guess: guess || ""
+    })
+  })
 
+  .then(response => {
+        if (!response.ok) {
+            throw new Error('Failed to submit guess');
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('Guess submitted:', data);
 
+        updateCircle(data.is_correct);
+
+        //showResultScreen(data.correct_answer, guess, data.artist_name, data.album_name, data.album_cover);
+
+        score = data.score;
+
+        if (data.message === "Game completed!") {
+            isGameOver = true;
+            showResultScreen(
+                data.correct_answer, 
+                guess || "No guess entered", 
+                data.artist_name, 
+                data.album_name, 
+                data.album_cover
+                );
+          setTimeout(() => {
+            showGameOverScreen();
+          }, 5000);
+        } else {
+            if (data.round !== currentGameData.round) {
+                console.log("Round changed, stopping timer");
+                clearInterval(timer);
+                isRunning = false;
+
+                setTimeout(() => {
+                    console.log("About to show result screen");
+                    showResultScreen(
+                        data.correct_answer, 
+                        guess || "No guess entered", 
+                        data.artist_name, 
+                        data.album_name, 
+                        data.album_cover
+                    );
+
+                    setTimeout(() => {
+                        console.log("About to advance to next round");    
+                        guessesUsed = 0;
+                        document.getElementById('guess1').style.backgroundColor = 'white';
+                        document.getElementById('guess2').style.backgroundColor = 'white';
+                        document.getElementById('guess3').style.backgroundColor = 'white';
+                        // Update stored round number
+                        currentGameData.round = data.round;
+
+                        clearInterval(timer);
+                        isRunning = false;
+                        
+                        if (data.preview_url) {
+                            playAudio(data.preview_url);
+                        }
+                        showGameScreen();
+
+                        timeLeft = 30;
+                        startCountdown();
+                    }, 5000);
+                }, 1000);
+            } else {
+               console.log("guess-input").value;
+            }
+            document.getElementById('guess-input').value = '';
+        }
+    })
+    .catch(error => {
+        console.error('Error submitting guess:', error);
+        //alert('Failed to submit guess. Please try again.');
+    });
+}
+
+//function to play the audio
+function playAudio(url) {
+  const audio = document.getElementById('audio-preview');
+  audio.src = url;
+  audio.play().catch(err => console.log('Autoplay blocked:', err));
+}
+
+//Changes the color of the guess circles
+function updateCircle(isCorrect) {
+    guessesUsed++;
+    const circle = document.getElementById(`guess${guessesUsed}`);
+    if (circle) circle.style.backgroundColor = isCorrect ? 'green' : 'red';
+}
+
+let timeLeft = 30;
+let isRunning = false;
+let timer = null;
+
+function startCountdown() {   
+  if (!isRunning) {
+    // start or resume
+    isRunning = true;
+    const countdownElement = document.getElementById("countdown");
+
+    timer = setInterval(() => {
+      timeLeft--;
+      countdownElement.textContent = timeLeft;
+
+      if (timeLeft <= 0) {
+        clearInterval(timer);
+        isRunning = false;
+        submitGuess(true); // this will submit an empty guess when time is up
+        
+
+        //console.log("Time is up");
+        //guessesUsed++;
+        //updateCircle(false);   
+      }
+    }, 1000);
+  } 
+}
