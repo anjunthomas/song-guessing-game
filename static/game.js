@@ -228,6 +228,7 @@ function submitGuess(fromTimer = false){
           }, 5000);
           clearTimeout(timer);
         } else {
+            console.log(`Comparing rounds: data.round=${data.round}, currentGameData.round=${currentGameData.round}`);
             if (data.round !== currentGameData.round) {
                 console.log("Round changed, stopping timer");
                 clearInterval(timer);

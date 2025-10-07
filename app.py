@@ -280,17 +280,20 @@ def submit_guess():
         if is_correct:
             score += 10
             game_sessions[game_id]['score'] = score
-            next_round = current_round + 1
+            #next_round = current_round + 1. this line is incorrect. it increments the round even if the game is over
             game_sessions[game_id]['guesses_remaining'] = 3
             next_preview_url = ''
 
-            if next_round <= 5 and next_round <= len(songs):
-                next_preview_url = songs[next_round - 1].get('previewUrl', '')
+            # we need to create this check to see if the game is over
+            if current_round < 5:
+                next_round = current_round + 1
                 game_sessions[game_id]['current_round'] = next_round
-                message = f"Round {next_round} of 5"
+                next_preview_url = songs[next_round - 1].get('previewUrl', '')
+                message = f"Correct! Moving to round {next_round} of 5"
             else:
+                next_round = current_round 
+                next_preview_url = ''
                 message = "Game completed!"
-                # Save score to database
                 try:
                     connection = sqlite3.connect('database.db')
                     cursor = connection.cursor()
