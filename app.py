@@ -144,11 +144,11 @@ def add_data():
     connection.commit()
     connection.close()
 
-# helper function returns 3 random songs using iTunes API
+# helper function returns 5 random songs using iTunes API
 def get_artist_songs(artist_name):
     try:
         artist = urllib.parse.quote(artist_name)
-        url = f"https://itunes.apple.com/search?term={artist}&media=music&entity=song&limit=5"
+        url = f"https://itunes.apple.com/search?term={artist}&media=music&entity=song&limit=10"
         response = requests.get(url)
 
         # check if request worked
@@ -166,7 +166,7 @@ def get_artist_songs(artist_name):
             if "previewUrl" in song:
                 songs.append(song)
 
-        return random.sample(songs, min(3, len(songs)))
+        return random.sample(songs, min(5, len(songs)))
     
     except Exception as e:
         print(f"Error in get_artist_songs: {str(e)}")
