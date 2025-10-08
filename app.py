@@ -362,7 +362,10 @@ def submit_guess():
             "score": score,
             "preview_url": next_preview_url,
             "message": message.strip(),
-            "guesses_remaining": guesses_remaining
+            "guesses_remaining": guesses_remaining,
+            "artist_name": current_song.get('artistName', ''),
+            "album_name": current_song.get('collectionName', ''),
+            "album_cover": current_song.get('artworkUrl100', '')
         }
 
         if game_over:
