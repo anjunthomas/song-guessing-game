@@ -8,8 +8,6 @@ from datetime import datetime
 
 app = Flask(__name__)
 
-#Dictionary of game sessions
-
 game_sessions = {}
 
 @app.route('/')
