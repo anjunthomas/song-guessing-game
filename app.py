@@ -328,5 +328,3 @@ if __name__ == '__main__':
     init_db()
     #add_data()
     app.run(debug=True, use_reloader=False)
-
-    
