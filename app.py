@@ -21,14 +21,16 @@ def index():
 # push to your branch to verify flask is working
 
 #example route to show POST request 
-@app.route('/test', methods=['POST'])
-def test_route():
-    data = request.get_json()
-    name = data.get("name", "Guest")
+
+#@app.route('/test', methods=['POST'])
+#def test_route():
+#    data = request.get_json()
+#    name = data.get("name", "Guest")
     
-    return jsonify({
-        "message": f"Hello, {name}! Your request was received successfully."
-    })
+#    return jsonify({
+#        "message": f"Hello, {name}! Your request was received successfully."
+#    })
+###
 
 # thaira's personal route following example above
 @app.route('/thaira')
@@ -275,6 +277,7 @@ def submit_guess():
         # get game_id and guess from request
         game_id = data.get('game_id')
         guess = data.get('guess')
+        is_timeout = guess == ""
         
         # validate required fields
         if not game_id or not guess:
