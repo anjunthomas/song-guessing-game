@@ -109,7 +109,7 @@ def save_score_to_db(username, score, artist):
 def get_artist_songs(artist_name):
     try:
         artist = urllib.parse.quote(artist_name)
-        url = f"https://itunes.apple.com/search?term={artist}&media=music&entity=song&limit=10"
+        url = f"https://itunes.apple.com/search?term={artist}&media=music&entity=song&limit=40"
         response = requests.get(url)
 
         # check if request worked
@@ -121,18 +121,30 @@ def get_artist_songs(artist_name):
 
         # initialize song array
         songs = []
+        seen_titles = set()
         artist_name_lower = artist_name.lower()
 
         # append songs with "previewUrl" key
         # exclude songs with artist name in fields other than "artistName"
         # exlude songs with "ft" or "feat"
         for song in results:
+            track_name = song.get("trackName", "")
+            track_name_lower = track_name.lower()
+
             if ("previewUrl" in song and 
             song.get("artistName", "").lower() == artist_name_lower and
-            not any (ft in song.get("trackName", "").lower() for ft in ["ft", "feat"])
+            not any (ft in track_name.lower() for ft in ["ft", "feat"]) and
+            "(" not in track_name and 
+            ")" not in track_name and
+            "-" not in track_name and
+            track_name_lower not in seen_titles
+            #song.get("trackExplicitness", "") == "notExplicit"
             ):
                 songs.append(song)
+                seen_titles.add(track_name_lower)
+                print(f"Added: {song.get('trackName', 'Unknown')}")
 
+        print(f"\nTotal songs found: {len(songs)}")
         return random.sample(songs, min(5, len(songs)))
     
     except Exception as e:
