@@ -156,7 +156,7 @@ def get_artist_songs(artist_name):
 
         # check if request worked
         if response.status_code != 200:
-            return[]
+            return []
 
         data = response.json()
         results = data.get("results", [])
@@ -188,13 +188,17 @@ def create_game_session(username, artist, songs):
     timestamp = int(time.time())
     game_id = f"{username}_{timestamp}"
 
+    round_limit = min(5, len(songs))
+
     session = {
         "username": username,
         "artist": artist,
-        "songs": songs,
+        "songs": songs[:round_limit],
         "current_round": 1,
-        "total_rounds": len(songs),
-        "score": 0
+        "total_rounds": round_limit,
+        "score": 0,
+        "max_guesses": 3,
+        "guesses_remaining": 3
     }
 
     # add session dict into global game_sessions
@@ -237,7 +241,8 @@ def start_game():
         "artist": session['artist'],
         "preview_url": preview_url,
         "score": 0,
-        "message": f"Game started with {artist}!"
+        "message": f"Game started with {artist}!",
+        "guesses_remaining": session['guesses_remaining']
     })
 
 # submit guess route
@@ -263,22 +268,36 @@ def submit_guess():
         current_round = game.get('current_round', 1)
         songs = game.get('songs', [])
         score = game.get('score', 0)
-        
+        round_limit = min(game.get('total_rounds', len(songs)), 5)
+        max_guesses = game.get('max_guesses', 3)
+        guesses_remaining = game.get('guesses_remaining', max_guesses)
+
+        # ensure guesses_remaining is tracked
+        if 'guesses_remaining' not in game:
+            game_sessions[game_id]['guesses_remaining'] = guesses_remaining
+
         # validate round and songs
         if current_round > 5 or current_round < 1: #changed this for testing
             return jsonify({"error": "Game has ended or invalid round."}), 400
-        
+
         if not songs or len(songs) < current_round:
             return jsonify({"error": "No songs available for this round."}), 500
-        
+
         # get current song for this round
         current_song = songs[current_round - 1]
         correct_answer = current_song.get('trackName', '')
-        
+
         # check if guess is correct (case-insensitive)
         is_correct = guess.lower().strip() == correct_answer.lower().strip()
-        
-        # update score if correct
+
+        # track state for response
+        advance_round = False
+        game_over = False
+        next_round = current_round
+        next_preview_url = current_song.get('previewUrl', '')
+        message = ""
+        round_for_response = current_round
+
         if is_correct:
             score += 10
             game_sessions[game_id]['score'] = score
@@ -318,6 +337,56 @@ def submit_guess():
         
     except Exception as e:
         print(f"Error in /api/submit-guess: {str(e)}")
+        return jsonify({"error": str(e)}), 500
+
+# fetch current round details without mutating game state
+@app.route('/api/next-round', methods=['GET'])
+def get_next_round():
+    try:
+        game_id = request.args.get('game_id')
+
+        if not game_id:
+            return jsonify({"error": "Missing 'game_id' query parameter."}), 400
+
+        if game_id not in game_sessions:
+            return jsonify({"error": f"Game session '{game_id}' not found."}), 404
+
+        game = game_sessions[game_id]
+        songs = game.get('songs', [])
+        current_round = game.get('current_round', 1)
+        total_rounds = game.get('total_rounds', len(songs))
+        score = game.get('score', 0)
+        guesses_remaining = game.get('guesses_remaining', game.get('max_guesses', 3))
+
+        if total_rounds == 0 or not songs:
+            return jsonify({"error": "No songs available for this game session."}), 400
+
+        # If the session has progressed past available songs, treat as game over
+        if current_round > total_rounds:
+            return jsonify({
+                "round": total_rounds,
+                "total_rounds": total_rounds,
+                "artist": game.get('artist', ''),
+                "preview_url": "",
+                "score": score,
+                "guesses_remaining": 0,
+                "message": "Game completed."
+            })
+
+        current_song = songs[current_round - 1]
+        preview_url = current_song.get('previewUrl', '')
+
+        return jsonify({
+            "round": current_round,
+            "total_rounds": total_rounds,
+            "artist": game.get('artist', ''),
+            "preview_url": preview_url,
+            "score": score,
+            "guesses_remaining": guesses_remaining
+        })
+
+    except Exception as e:
+        print(f"Error in /api/next-round: {str(e)}")
         return jsonify({"error": str(e)}), 500
 
 # test route to check game sessions
