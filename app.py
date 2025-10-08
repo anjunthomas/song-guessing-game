@@ -20,7 +20,8 @@ def index():
 # Ex route. '/anju' 
 # push to your branch to verify flask is working
 
-#example route to show POST request 
+#example route to show POST request
+'''
 @app.route('/test', methods=['POST'])
 def test_route():
     data = request.get_json()
@@ -29,6 +30,8 @@ def test_route():
     return jsonify({
         "message": f"Hello, {name}! Your request was received successfully."
     })
+'''
+
 
 # thaira's personal route following example above
 @app.route('/thaira')
@@ -144,31 +147,7 @@ def add_data():
     connection.commit()
     connection.close()
 
-# helper function to save score to database
-def save_score_to_db(username, score, artist):
-    """
-    Save a game score to the database
-    Returns True if successful, False if error
-    """
-    try:
-        connection = sqlite3.connect('database.db')
-        cursor = connection.cursor()
-        
-        cursor.execute('''
-            INSERT INTO scores (username, score, artist) 
-            VALUES (?, ?, ?)
-        ''', (username, score, artist))
-        
-        connection.commit()
-        connection.close()
-        print(f"Score saved: {username} - {score} points ({artist})")
-        return True
-        
-    except Exception as e:
-        print(f"Error saving score: {str(e)}")
-        return False
-
-# helper function returns up to 5 random songs using iTunes API
+# helper function returns 5 random songs using iTunes API
 def get_artist_songs(artist_name):
     try:
         artist = urllib.parse.quote(artist_name)
@@ -184,10 +163,16 @@ def get_artist_songs(artist_name):
 
         # initialize song array
         songs = []
+        artist_name_lower = artist_name.lower()
 
         # append songs with "previewUrl" key
+        # exclude songs with artist name in fields other than "artistName"
+        # exlude songs with "ft" or "feat"
         for song in results:
-            if "previewUrl" in song:
+            if ("previewUrl" in song and 
+            song.get("artistName", "").lower() == artist_name_lower and
+            not any (ft in song.get("trackName", "").lower() for ft in ["ft", "feat"])
+            ):
                 songs.append(song)
 
         return random.sample(songs, min(5, len(songs)))
@@ -292,7 +277,7 @@ def submit_guess():
             game_sessions[game_id]['guesses_remaining'] = guesses_remaining
 
         # validate round and songs
-        if current_round > round_limit or current_round < 1:
+        if current_round > 5 or current_round < 1: #changed this for testing
             return jsonify({"error": "Game has ended or invalid round."}), 400
 
         if not songs or len(songs) < current_round:
@@ -316,60 +301,38 @@ def submit_guess():
         if is_correct:
             score += 10
             game_sessions[game_id]['score'] = score
-            advance_round = True
-            message = "Correct!"
+            
+        next_round = current_round + 1
+        
+        next_preview_url = ''
+        if next_round <= 5 and next_round <= len(songs):
+            next_preview_url = songs[next_round - 1].get('previewUrl', '')
+            game_sessions[game_id]['current_round'] = next_round
+            message = f"Round {next_round} of 5"
         else:
-            guesses_remaining -= 1
-            game_sessions[game_id]['guesses_remaining'] = guesses_remaining
-
-            if guesses_remaining > 0:
-                message = f"Incorrect. {guesses_remaining} guesses remaining."
-            else:
-                advance_round = True
-                message = "No guesses remaining."
-
-        if advance_round:
-            next_round = current_round + 1
-            has_next_song = next_round <= round_limit and len(songs) >= next_round
-
-            if has_next_song:
-                game_sessions[game_id]['current_round'] = next_round
-                game_sessions[game_id]['guesses_remaining'] = max_guesses
-                next_preview_url = songs[next_round - 1].get('previewUrl', '')
-                message = message + f" Moving to round {next_round}."
-                guesses_remaining = max_guesses
-                round_for_response = next_round
-            else:
-                # game finished - save final score to database
-                username = game.get('username', 'Unknown')
-                artist = game.get('artist', 'Unknown')
-
-                if save_score_to_db(username, score, artist):
-                    message = message + " Game completed! Score saved to leaderboard."
-                else:
-                    message = message + " Game completed! (Note: Score saving failed)"
-
-                game_over = True
-                guesses_remaining = 0
-                next_preview_url = ''
-                round_for_response = round_limit
-
-        # prepare response object using updated values
+            message = "Game completed!"
+            # Save score to database
+            try:
+                connection = sqlite3.connect('database.db')
+                cursor = connection.cursor()
+                cursor.execute(
+                    'INSERT INTO scores (username, score, artist) VALUES (?, ?, ?)',
+                    (game['username'], score, game['artist'])
+                )
+                connection.commit()
+                connection.close()
+            except Exception as e:
+                print(f"Error saving score: {str(e)}")
+        
+        # prepare response
         response = {
             "is_correct": is_correct,
             "correct_answer": correct_answer,
-            "round": round_for_response,
+            "round": next_round,
             "score": score,
             "preview_url": next_preview_url,
-            "message": message.strip(),
-            "guesses_remaining": guesses_remaining
-        }
-
-        if game_over:
-            # remove game session from memory to free up space
-            if game_id in game_sessions:
-                del game_sessions[game_id]
-
+            "message": message
+        }   
         return jsonify(response)
         
     except Exception as e:
