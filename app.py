@@ -16,39 +16,6 @@ game_sessions = {}
 def index(): 
     return send_from_directory('static', 'index.html')
 
-#backend developers, create a new route here with your name that returns a similar message
-# Ex route. '/anju' 
-# push to your branch to verify flask is working
-
-#example route to show POST request 
-
-#@app.route('/test', methods=['POST'])
-#def test_route():
-#    data = request.get_json()
-#    name = data.get("name", "Guest")
-    
-#    return jsonify({
-#        "message": f"Hello, {name}! Your request was received successfully."
-#    })
-###
-
-# thaira's personal route following example above
-@app.route('/thaira')
-def thaira():
-    return "Hello, my name is Thaira!"
-
-# jessie's personal route following example above
-@app.route('/jessie')
-def jessie():
-    return "Hello, my name is Jessie!"
-
-# game route
-@app.route('/game', methods=['POST'])
-def game():
-    return jsonify({
-        "message": "game route is working"
-    })
-
 # api scores route
 @app.route('/api/scores', methods=['GET'])
 def get_scores():
@@ -88,36 +55,6 @@ def get_scores():
         
     except Exception as e:
         print(f"Error in /api/scores: {str(e)}")  # Debug info
-        return jsonify({"error": str(e)}), 500
-
-# test database connection route
-@app.route('/api/test-db', methods=['GET'])
-def test_db():
-    try:
-        connection = sqlite3.connect('database.db')
-        cursor = connection.cursor()
-        
-        # Check table structure
-        cursor.execute("PRAGMA table_info(scores)")
-        columns = cursor.fetchall()
-        
-        # Count records
-        cursor.execute("SELECT COUNT(*) FROM scores")
-        count = cursor.fetchone()[0]
-        
-        # Get sample data
-        cursor.execute("SELECT * FROM scores LIMIT 3")
-        sample = cursor.fetchall()
-        
-        connection.close()
-        
-        return jsonify({
-            "message": f"Database connected! Found {count} scores.",
-            "columns": [col[1] for col in columns],  # column names
-            "sample_data": sample,
-            "full_column_info": columns
-        })
-    except Exception as e:
         return jsonify({"error": str(e)}), 500
 
 # initialize database
@@ -265,7 +202,6 @@ def start_game():
         "preview_url": preview_url,
         "score": 0,
         "message": f"Game started with {artist}!",
-        "guesses_remaining": session['guesses_remaining']
     })
 
 # submit guess route
@@ -280,8 +216,8 @@ def submit_guess():
         is_timeout = guess == ""
         
         # validate required fields
-        if not game_id or not guess:
-            return jsonify({"error": "Missing 'game_id' or 'guess' in request."}), 400
+        if not game_id:
+            return jsonify({"error": "Missing 'game_id' request."}), 400
         
         # check if game session exists
         if game_id not in game_sessions:
@@ -295,10 +231,6 @@ def submit_guess():
         round_limit = min(game.get('total_rounds', len(songs)), 5)
         max_guesses = game.get('max_guesses', 3)
         guesses_remaining = game.get('guesses_remaining', max_guesses)
-
-        # ensure guesses_remaining is tracked
-        if 'guesses_remaining' not in game:
-            game_sessions[game_id]['guesses_remaining'] = guesses_remaining
 
         # validate round and songs
         if current_round > round_limit or current_round < 1:
