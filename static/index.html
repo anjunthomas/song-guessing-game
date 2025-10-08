@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Song Guessing Game</title>
     <link rel="stylesheet" href="/static/styles.css">
+    <link rel="icon" type="image/x-icon" href="static/favicon.ico">
 </head>
 <body>
     <div id="container">
@@ -61,7 +62,7 @@
 
     <div id="gameover-screen" style="display: none;" class="white-box">
         <p id="game-over">Game Over!</p>
-        <p id="final-score-message">Final Score: <span id="final-score">0</span></p>
+        <p id="final-score-message">Final Score: You scored <span id="final-score">0</span> out of 50!</p>
         <button id="try-again" onclick="showSetupScreen()">Try Again</button>
         <button id="home-button" onclick="showHomeScreen()">Home</button>
     </div>

@@ -226,7 +226,9 @@ function submitGuess(fromTimer = false){
           setTimeout(() => {
             showGameOverScreen();
           }, 5000);
+          clearTimeout(timer);
         } else {
+            console.log(`Comparing rounds: data.round=${data.round}, currentGameData.round=${currentGameData.round}`);
             if (data.round !== currentGameData.round) {
                 console.log("Round changed, stopping timer");
                 clearInterval(timer);
@@ -292,6 +294,7 @@ function updateCircle(isCorrect) {
 let timeLeft = 30;
 let isRunning = false;
 let timer = null;
+
 
 function startCountdown() {   
   if (!isRunning) {
