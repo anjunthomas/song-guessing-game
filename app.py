@@ -147,7 +147,7 @@ def add_data():
     connection.commit()
     connection.close()
 
-# helper function returns 3 random songs using iTunes API
+# helper function returns 5 random songs using iTunes API
 def get_artist_songs(artist_name):
     try:
         artist = urllib.parse.quote(artist_name)
@@ -163,10 +163,16 @@ def get_artist_songs(artist_name):
 
         # initialize song array
         songs = []
+        artist_name_lower = artist_name.lower()
 
         # append songs with "previewUrl" key
+        # exclude songs with artist name in fields other than "artistName"
+        # exlude songs with "ft" or "feat"
         for song in results:
-            if "previewUrl" in song:
+            if ("previewUrl" in song and 
+            song.get("artistName", "").lower() == artist_name_lower and
+            not any (ft in song.get("trackName", "").lower() for ft in ["ft", "feat"])
+            ):
                 songs.append(song)
 
         return random.sample(songs, min(5, len(songs)))
