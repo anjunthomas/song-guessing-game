@@ -8,11 +8,13 @@ function hideAllScreens() {
 }
 // showing the screen that you want to display
 function showSetupScreen() {
+    pauseAudio();
     hideAllScreens();
     document.getElementById('setup-screen').style.display = 'block';
 }
 
 function showHomeScreen() {
+    pauseAudio();
     hideAllScreens();
     document.getElementById('home-screen').style.display = 'block';
 }
@@ -97,6 +99,8 @@ let score = 0; /*default that will be changed later*/
 let currentGameData = null
 let guessesUsed = 0;
 let isGameOver = false;
+const audio = document.getElementById('audio-preview');
+audio.volume = 0.5;
 
 
 function startGame() {
@@ -115,6 +119,7 @@ function startGame() {
     score = 0;
     guessesUsed = 0;
     currentGameData = null;
+    document.getElementById('guess-input').value = '';
   
     //POST fetch request to start the game
     fetch('/api/start-game', {
@@ -213,6 +218,7 @@ function submitGuess(fromTimer = false){
         //showResultScreen(data.correct_answer, guess, data.artist_name, data.album_name, data.album_cover);
 
         score = data.score;
+        document.getElementById('real-score').textContent = score;
 
         if (data.message === "Game completed!") {
             isGameOver = true;
@@ -279,9 +285,12 @@ function submitGuess(fromTimer = false){
 
 //function to play the audio
 function playAudio(url) {
-  const audio = document.getElementById('audio-preview');
   audio.src = url;
   audio.play().catch(err => console.log('Autoplay blocked:', err));
+}
+
+function pauseAudio() {
+  audio.pause();
 }
 
 //Changes the color of the guess circles
@@ -297,10 +306,15 @@ let timer = null;
 
 
 function startCountdown() {   
+  clearInterval(timer);
+  const countdownElement = document.getElementById("countdown");
+
+  //starts timer at 30
+  timeLeft = 30;
+  countdownElement.textContent = timeLeft; 
   if (!isRunning) {
     // start or resume
     isRunning = true;
-    const countdownElement = document.getElementById("countdown");
 
     timer = setInterval(() => {
       timeLeft--;
