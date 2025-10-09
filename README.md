@@ -11,3 +11,8 @@ This app uses Flask for the backend, HTMl, CSS, and Javascript for the frontend,
 install dependencies with pip install -r requirements.txt
 
 run app with python app.py
+
+## Contributors:
+Mia and Nicole (Frontend Developers
+Jessie and Thaira (Backend Developers)
+Anju (Software Project Lead)
