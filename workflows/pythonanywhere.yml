@@ -1,0 +1,24 @@
+name: Deploying MusicMatch to PythonAnywhere
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Deploy to PythonAnywhere
+      run: |
+        curl -X POST \
+          -H "Authorization: Token ${{ secrets.PYTHONANYWHERE_API_TOKEN }}" \
+          https://www.pythonanywhere.com/api/v0/user/musicmatch/webapps/musicmatch.pythonanywhere.com/reload/
+        
+    - name: Pull latest code on PythonAnywhere
+      run: |
+        curl -X POST \
+          -H "Authorization: Token ${{ secrets.PYTHONANYWHERE_API_TOKEN }}" \
+          -H "Content-Type: application/json" \
+          -d '{"command": "cd song-guessing-game && git pull origin main"}' \
+          https://www.pythonanywhere.com/api/v0/user/musicmatch/consoles/
