@@ -13,6 +13,6 @@ install dependencies with pip install -r requirements.txt
 run app with python app.py
 
 ## Contributors:
-Mia and Nicole (Frontend Developers
-Jessie and Thaira (Backend Developers)
-Anju (Software Project Lead)
+- Mia and Nicole (Frontend Developers)
+- Jessie and Thaira (Backend Developers)
+- Anju (Software Project Lead)
