@@ -1,4 +1,4 @@
-# song-guessing-game
+# Music Match
 
 A web based music guessing game where players can guess songs by their favorite artist! Play 5 rounds and test your music knowledge
 
