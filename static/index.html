@@ -13,7 +13,7 @@
         <div id="home-screen" class="white-box">
             <p>Choose an artist. <br> Guess the song. <br> Rank against other players!</p>
             <button class="button" onclick="showSetupScreen()">Start Playing</button>
-            <button class="button">View Scores</button>
+            <button class="button" onclick="showLeaderboardScreen()">View Scores</button>
         </div>
 
     <div id="setup-screen" style="display: none" class="white-box">
@@ -65,6 +65,11 @@
         <p id="final-score-message">Final Score: You scored <span id="final-score">0</span> out of 50!</p>
         <button id="try-again" onclick="showSetupScreen()">Try Again</button>
         <button id="home-button" onclick="showHomeScreen()">Home</button>
+    </div>
+    <div id="leaderboard-screen" style="display: none;" class="white-box">
+        <h1 id="leaderboard-title">Leaderboard</h1>
+        <ol id="leaderboard"></ol>
+        <button id="back-button" onclick="showHomeScreen()">Back</button>
     </div>
     <script src="/static/game.js"></script>
     </div>

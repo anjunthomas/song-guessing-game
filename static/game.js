@@ -5,6 +5,7 @@ function hideAllScreens() {
     document.getElementById('game-screen').style.display = 'none';
     document.getElementById('result-screen').style.display = 'none';
     document.getElementById('gameover-screen').style.display = 'none';
+    document.getElementById('leaderboard-screen').style.display = 'none';
 }
 // showing the screen that you want to display
 function showSetupScreen() {
@@ -37,6 +38,12 @@ function showResultScreen(correct_answer, guess, artist_name, album_name, album_
 
     startNextCountdown();
 } 
+
+function showLeaderboardScreen() {
+    hideAllScreens();
+    document.getElementById('leaderboard-screen').style.display = 'block';
+    showScores();
+}
 
 function startNextCountdown() { 
     const countdownDiv = document.getElementById('next-round-countdown');
@@ -100,7 +107,7 @@ let currentGameData = null
 let guessesUsed = 0;
 let isGameOver = false;
 const audio = document.getElementById('audio-preview');
-audio.volume = 0.5;
+audio.volume = 0.3;
 
 
 function startGame() {
@@ -281,6 +288,35 @@ function submitGuess(fromTimer = false){
         console.error('Error submitting guess:', error);
         //alert('Failed to submit guess. Please try again.');
     });
+}
+
+//shows leaderboard data
+function showScores(){
+    fetch('/api/scores')
+    .then(response => {
+    if (!response.ok) {
+      throw new Error('Failed to load scores');
+    }
+    return response.json();
+  })
+
+    .then(data => {
+        console.log('Scores loaded: ', data);
+        const leaderboard = document.getElementById('leaderboard');
+        leaderboard.innerHTML = '';
+
+        data.forEach(entry => {
+        const li = document.createElement('li');
+        li.textContent = `${entry.username} — ${entry.score} (${entry.artist})`;
+        leaderboard.appendChild(li);
+      });
+
+    })
+    .catch(error => {
+        console.error('Error loading scores: ', error);
+        alert('Failed to load scores.');
+    })
+
 }
 
 //function to play the audio

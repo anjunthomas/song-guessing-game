@@ -276,3 +276,20 @@ input { /* input boxes */
   border-radius: 8px;
   font-weight: bold;
 }
+
+#leaderboard{
+  font-size: 20px;
+  font-family: Arial, sans-serif;
+  color: rgb(41, 88, 49);
+}
+
+#back-button{
+  background-color:#6ddad4;
+    color: white;
+    height: 40px;
+    width: 100px;
+    border-color: #6ddad4;
+    border-radius: 10px;
+    font-size: 20px;
+    cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32'><text y='24' font-size='24'>🎶</text></svg>") 0 0, auto;
+}
