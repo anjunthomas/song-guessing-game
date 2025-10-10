@@ -9,16 +9,19 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-    - name: Deploy to PythonAnywhere
-      run: |
-        curl -X POST \
-          -H "Authorization: Token ${{ secrets.PYTHONANYWHERE_API_TOKEN }}" \
-          https://www.pythonanywhere.com/api/v0/user/musicmatch/webapps/musicmatch.pythonanywhere.com/reload/
-        
     - name: Pull latest code on PythonAnywhere
       run: |
         curl -X POST \
           -H "Authorization: Token ${{ secrets.PYTHONANYWHERE_API_TOKEN }}" \
           -H "Content-Type: application/json" \
-          -d '{"command": "cd song-guessing-game && git pull origin main"}' \
+          -d '{"command": "cd /home/musicmatch/song-guessing-game && git pull origin main"}' \
           https://www.pythonanywhere.com/api/v0/user/musicmatch/consoles/
+    
+    - name: Wait for git pull to complete
+      run: sleep 10
+        
+    - name: Reload web app
+      run: |
+        curl -X POST \
+          -H "Authorization: Token ${{ secrets.PYTHONANYWHERE_API_TOKEN }}" \
+          https://www.pythonanywhere.com/api/v0/user/musicmatch/webapps/musicmatch.pythonanywhere.com/reload/
