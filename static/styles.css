@@ -1,5 +1,5 @@
 body {
-  font-family: Arial, sans-serif;
+  font-family: 'Poppins', sans-serif;
   background-color: #e2f7f3;
   display: flex;
   justify-content: center;
@@ -14,7 +14,7 @@ body {
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   width: 400px;
-  font-family: 'Arial', sans-serif;
+  font-family: 'Poppins', sans-serif;
   color: #1c3d36;
 }
 
@@ -300,4 +300,63 @@ input { /* input boxes */
   font-family: Arial, sans-serif;
   border-radius: 8px;
   font-weight: bold;
+}
+
+
+/* this css makes it playable on mobile too by adjusting the screen elements' sizes*/
+@media (max-width: 768px) {
+  #container {
+    height: auto;
+    padding: 20px;
+  }
+
+  .white-box {
+    width: 90%;
+    max-width: 400px;
+    padding: 25px;
+  }
+
+  #game-screen {
+    width: 95%;
+    height: auto;
+    padding: 20px;
+    gap: 15px;
+  }
+
+  #top-row,
+  #middle-row,
+  #bottom-row {
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    margin-left: 0;
+  }
+
+  #guess-input {
+    width: 80%;
+    font-size: 18px;
+  }
+
+  #search {
+    width: 60%;
+    font-size: 18px;
+  }
+
+  #time-left,
+  #countdown,
+  #guesses,
+  #score,
+  #real-score {
+    font-size: 28px;
+  }
+
+  .button {
+    font-size: 15px;
+    padding: 10px 20px;
+    width: 70%;
+  }
+
+  .album-cover {
+    width: 120px;
+  }
 }

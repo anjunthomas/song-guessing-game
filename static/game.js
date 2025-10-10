@@ -312,6 +312,7 @@ function startCountdown() {
   //starts timer at 30
   timeLeft = 30;
   countdownElement.textContent = timeLeft; 
+  countdownElement.style.color = "rgb(41, 88, 49)";
   if (!isRunning) {
     // start or resume
     isRunning = true;
@@ -320,7 +321,17 @@ function startCountdown() {
       timeLeft--;
       countdownElement.textContent = timeLeft;
 
-      if (timeLeft <= 0) {
+    if (timeLeft <= 5) {
+        countdownElement.style.color = 'red';
+    }
+
+    if (timeLeft > 5) {
+        countdownElement.style.color = "rgb(41, 88, 49)";
+    }
+
+
+
+    if (timeLeft <= 0) {
         clearInterval(timer);
         isRunning = false;
         submitGuess(true); // this will submit an empty guess when time is up
