@@ -11,8 +11,8 @@ app = Flask(__name__)
 game_sessions = {}
 
 @app.route('/')
-def index(): 
-    return send_from_directory('static', 'index.html')
+def index():
+    return render_template('index.html')
 
 # api scores route
 @app.route('/api/scores', methods=['GET'])

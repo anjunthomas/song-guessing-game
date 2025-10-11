@@ -283,6 +283,131 @@ input { /* input boxes */
   color: rgb(41, 88, 49);
 }
 
+.leaderboard {
+  max-width: 100%;
+  width: 100%;
+  background: #f5f5ff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  border: 2px solid white;
+  padding: 20px;
+  margin: 0;
+}
+
+#leaderboard-screen.white-box {
+  width: 800px;  
+  max-height: 80vh; 
+  overflow-y: auto;
+  padding: 40px;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+#leaderboard-screen.white-box::-webkit-scrollbar {
+  display: none;
+}
+
+#leaderboard-title {
+  font-size: 32px;
+  font-family: 'Poppins', sans-serif;
+  color: #2c3e50;
+  margin-bottom: 20px;
+  margin-top: 0;
+}
+
+
+.leaderboard-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: white;
+  margin: 10px 0;
+  padding: 15px 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  animation: slideIn 0.5s ease forwards;
+  opacity: 0;
+  min-height: 60px;
+}
+
+
+
+.leaderboard-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+
+.rank {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #2c3e50;
+  width: 60px;
+  text-align: left;
+  flex-shrink: 0;
+}
+
+.user-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  min-width: 0;
+}
+
+.username {
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: #2c3e50;
+  width: 150px;
+  flex-shrink: 0;
+}
+
+.artist-info {
+  font-size: 1rem;
+  color: #666;
+  flex: 1;
+  text-align: center;
+}
+
+.score-info {
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: #2c3e50;
+  width: 150px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+
+.stats {
+  color: #666;
+  font-size: 0.9rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 5px;
+}
+
+.stat {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.stat:last-child {
+  margin-left: auto;
+}
+
+
+.badge {
+  font-size: 2rem;
+  flex-shrink: 0;
+  margin-left: 15px;
+  width: 40px;
+  text-align: center;
+}
+
 #back-button{
   background-color:#6ddad4;
     color: white;
@@ -292,4 +417,75 @@ input { /* input boxes */
     border-radius: 10px;
     font-size: 20px;
     cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32'><text y='24' font-size='24'>🎶</text></svg>") 0 0, auto;
+}
+
+
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* this css makes it playable on mobile too by adjusting the screen elements' sizes*/
+@media (max-width: 768px) {
+  #container {
+    height: auto;
+    padding: 20px;
+  }
+
+  .white-box {
+    width: 90%;
+    max-width: 400px;
+    padding: 25px;
+  }
+
+  #game-screen {
+    width: 95%;
+    height: auto;
+    padding: 20px;
+    gap: 15px;
+  }
+
+  #top-row,
+  #middle-row,
+  #bottom-row {
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    margin-left: 0;
+  }
+
+  #guess-input {
+    width: 80%;
+    font-size: 18px;
+  }
+
+  #search {
+    width: 60%;
+    font-size: 18px;
+  }
+
+  #time-left,
+  #countdown,
+  #guesses,
+  #score,
+  #real-score {
+    font-size: 28px;
+  }
+
+  .button {
+    font-size: 15px;
+    padding: 10px 20px;
+    width: 70%;
+  }
+
+  .album-cover {
+    width: 120px;
+  }
 }

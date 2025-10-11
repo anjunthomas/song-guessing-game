@@ -305,10 +305,9 @@ function showScores(){
         const leaderboard = document.getElementById('leaderboard');
         leaderboard.innerHTML = '';
 
-        data.forEach(entry => {
-        const li = document.createElement('li');
-        li.textContent = `${entry.username} — ${entry.score} (${entry.artist})`;
-        leaderboard.appendChild(li);
+        data.forEach((entry, index) => {
+            const item = createLeaderboardItem(entry, index)
+            leaderboard.appendChild(item);
       });
 
     })
@@ -318,6 +317,22 @@ function showScores(){
     })
 
 }
+
+function createLeaderboardItem(user, index) {
+    const item = document.createElement('div');
+    item.className = 'leaderboard-item';
+    item.style.animationDelay = `${index * 0.1}s`;
+
+      item.innerHTML = `
+        <div class="rank">#${index + 1}</div>
+        <div class="username">${user.username}</div>
+        <div class="artist-info">Artist: ${user.artist}</div>
+        <div class="score-info">Score: ${user.score}</div>
+        ${index < 3 ? `<div class="badge">${['🥇', '🥈', '🥉'][index]}</div>` : '<div class="badge"></div>'}
+    `;
+    return item;
+}
+
 
 //function to play the audio
 function playAudio(url) {
@@ -347,7 +362,8 @@ function startCountdown() {
 
   //starts timer at 30
   timeLeft = 30;
-  countdownElement.textContent = timeLeft; 
+  countdownElement.textContent = timeLeft;
+  countdownElement.style.color = "rgb(41, 88, 49)"; 
   if (!isRunning) {
     // start or resume
     isRunning = true;
@@ -355,6 +371,15 @@ function startCountdown() {
     timer = setInterval(() => {
       timeLeft--;
       countdownElement.textContent = timeLeft;
+
+    if (timeLeft <= 5) {
+        countdownElement.style.color = 'red';
+    }
+
+    if (timeLeft > 5) {
+        countdownElement.style.color = "rgb(41, 88, 49)";
+    }
+
 
       if (timeLeft <= 0) {
         clearInterval(timer);
@@ -369,3 +394,5 @@ function startCountdown() {
     }, 1000);
   } 
 }
+
+
