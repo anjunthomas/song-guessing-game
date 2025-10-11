@@ -4,6 +4,7 @@ import requests
 import random
 import urllib.parse
 import time
+import unicodedata
 from datetime import datetime
 
 app = Flask(__name__)
@@ -150,6 +151,12 @@ def get_artist_songs(artist_name):
     except Exception as e:
         print(f"Error in get_artist_songs: {str(e)}")
         return []
+    
+    # to normalize for accents
+def normalize_text(text):
+    nfd = unicodedata.normalize('NFD', text)
+    without_accents = ''.join(char for char in nfd if unicodedata.category(char) != 'Mn')
+    return without_accents.lower().strip()
 
 # creates game session with a unique id and inital game state
 def create_game_session(username, artist, songs):
@@ -254,7 +261,7 @@ def submit_guess():
         correct_answer = current_song.get('trackName', '')
 
         # check if guess is correct (case-insensitive)
-        is_correct = guess.lower().strip() == correct_answer.lower().strip()
+        is_correct = normalize_text(guess) == normalize_text(correct_answer)
 
         # update score if correct
         if is_correct:
