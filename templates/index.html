@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Song Guessing Game</title>
-    <link rel="stylesheet" href="/static/styles.css">
-    <link rel="icon" type="image/x-icon" href="static/favicon.ico">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
 </head>
 <body>
     <div id="container">
@@ -60,20 +60,20 @@
         </div>
     </div>
 
-    <div id="gameover-screen" style="display: none;" class="white-box">
-        <p id="game-over">Game Over!</p>
-        <p id="final-score-message">Final Score: You scored <span id="final-score">0</span> out of 50!</p>
-        <button id="try-again" onclick="showSetupScreen()">Try Again</button>
-        <button id="home-button" onclick="showHomeScreen()">Home</button>
-    </div>
-    <div id="leaderboard-screen" style="display: none;" class="white-box">
-        <div class="leaderboard">
-            <h1 id="leaderboard-title">Leaderboard</h1>
-            <div id="leaderboard"></div>
-            <button id="back-button" onclick="showHomeScreen()">Back</button>
+        <div id="gameover-screen" style="display: none;" class="white-box">
+            <p id="game-over">Game Over!</p>
+            <p id="final-score-message">Final Score: You scored <span id="final-score">0</span> out of 50!</p>
+            <button id="try-again" onclick="showSetupScreen()">Try Again</button>
+            <button id="home-button" onclick="showHomeScreen()">Home</button>
+        </div>
+        <div id="leaderboard-screen" style="display: none;" class="white-box">
+            <div class="leaderboard">
+                <h1 id="leaderboard-title">Leaderboard</h1>
+                <div id="leaderboard"></div>
+                <button id="back-button" onclick="showHomeScreen()">Back</button>
+            </div>
         </div>
     </div>
-    <script src="/static/game.js"></script>
-    </div>
+    <script src="{{ url_for('static', filename='game.js') }}"></script>
 </body>
 </html>

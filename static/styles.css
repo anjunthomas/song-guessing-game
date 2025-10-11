@@ -1,5 +1,5 @@
 body {
-  font-family: Arial, sans-serif;
+  font-family: 'Poppins', sans-serif;
   background-color: #e2f7f3;
   display: flex;
   justify-content: center;
@@ -14,19 +14,27 @@ body {
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   width: 400px;
-  font-family: 'Arial', sans-serif;
+  font-family: 'Poppins', sans-serif;
   color: #1c3d36;
+}
+
+.white-box:hover {
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.12);
 }
 
 #main-title { /* Song Guessing Game Title */
   text-align: center;
   width: 100%;
   margin: 40px auto 20px auto;
-  font-family: Arial, sans-serif;
-  color: #1c3d36;
+  font-family: 'Poppins', sans-serif;
+  color: #2c3e50;
   font-size: 40px;
+  font-weight: 790;
   white-space: nowrap;
+  border-radius: 8px; 
+  text-shadow: 0px 2px 2px rgba(0, 0, 0, 0.25);
 }
+
 
 #container {
   display: flex;
@@ -39,13 +47,19 @@ body {
 
 #home-screen {
   font-size: 30px;
+  line-height: 1.4;
 }
 
+#home-screen p {
+  margin-bottom: 28px;
+}
+
+
 h2 { /* Choose an artist */
-  font-size: 20px;
-  color:rgb(41, 88, 49);
+  font-size: 26px;
+  color:rgb(41, 76, 48);
   align-self: center;
-  margin-bottom: 10px;
+  margin-bottom: 10px
 }
 
 .button {
@@ -70,7 +84,7 @@ h2 { /* Choose an artist */
 .form-setup-screen { /* column for input boxes */
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 26px;
 }
 
 #game-screen{
@@ -198,6 +212,10 @@ h2 { /* Choose an artist */
   width: 350px;
 }
 
+.gameover-screen:hover {
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.12);
+}
+
 #game-over{
   font-size: 32px;
   font-weight: bold;
@@ -242,8 +260,11 @@ h2 { /* Choose an artist */
 input { /* input boxes */
   padding: 10px;
   font-size: 16px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+  border: 1px solid #c9d3d8;
+  border-radius: 6px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.12);
+  outline: none;
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
 }
 
 .album-cover { /* album cover image on result screen */
@@ -255,6 +276,10 @@ input { /* input boxes */
 
 #result-screen.white-box { /* bigger white box for result screen */
   width: 500px;
+}
+
+#result-screen.white-box:hover {
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.12);
 }
 
 #result-screen p { /* small text on result screen */

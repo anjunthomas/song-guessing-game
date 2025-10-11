@@ -381,7 +381,7 @@ function startCountdown() {
     }
 
 
-      if (timeLeft <= 0) {
+    if (timeLeft <= 0) {
         clearInterval(timer);
         isRunning = false;
         submitGuess(true); // this will submit an empty guess when time is up
