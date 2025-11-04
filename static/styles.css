@@ -1,10 +1,18 @@
 body {
   font-family: 'Poppins', sans-serif;
-  background-color: #e2f7f3;
+  background: linear-gradient(45deg, #e2f7f3, #d0f0eb, #b8e6e0, #e2f7f3);
+  background-size: 300% 300%;
+  animation: gradientShift 12s ease infinite;
   display: flex;
   justify-content: center;
   align-items: center;
-  cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32'><text y='24' font-size='24'>🎵</text></svg>") 0 0, auto; /* emoji music note cursor */
+  cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32'><text y='24' font-size='24'>🎵</text></svg>") 0 0, auto;
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
 .white-box { /* white box for all screens */
@@ -22,17 +30,23 @@ body {
   box-shadow: 0 12px 25px rgba(0, 0, 0, 0.12);
 }
 
-#main-title { /* Song Guessing Game Title */
+#main-title {
   text-align: center;
   width: 100%;
   margin: 40px auto 20px auto;
   font-family: 'Poppins', sans-serif;
   color: #2c3e50;
-  font-size: 40px;
+  font-size: 50px;
   font-weight: 790;
   white-space: nowrap;
   border-radius: 8px; 
   text-shadow: 0px 2px 2px rgba(0, 0, 0, 0.25);
+  animation: titleFloat 3s ease-in-out infinite;
+}
+
+@keyframes titleFloat {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
 }
 
 
@@ -56,10 +70,12 @@ body {
 
 
 h2 { /* Choose an artist */
-  font-size: 26px;
-  color:rgb(41, 76, 48);
+  font-size: 28px;
+  color: rgb(41, 76, 48);
   align-self: center;
-  margin-bottom: 10px
+  margin-bottom: 10px;
+  font-weight: 700;
+  text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.08);
 }
 
 .button {
@@ -512,5 +528,20 @@ input { /* input boxes */
 
   .album-cover {
     width: 120px;
+  }
+
+    #leaderboard-screen.white-box {
+    width: 95%;
+    padding: 20px;
+    max-height: 85vh;
+  }
+
+  #leaderboard-title {
+    font-size: 24px;
+  }
+
+  .leaderboard-item {
+    flex-direction: column;
+    align-items: flex-start;
   }
 }
